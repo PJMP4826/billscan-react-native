@@ -2,10 +2,18 @@ import React from "react";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, View } from "react-native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useClientOnlyValue } from "@/components/useClientOnlyValue";
+
+type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
+type MaterialIconName = React.ComponentProps<typeof MaterialIcons>["name"];
+
+function IonIcon(props: { name: IoniconName; color: string }) {
+  return <Ionicons size={24} style={{ marginBottom: -3 }} {...props} />;
+}
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>["name"];
@@ -23,25 +31,21 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: useClientOnlyValue(false, true),
 
-        // ==========================================
-        // DISEÑO ESTILO DOCK FLOTANTE CON SOMBRAS
-        // ==========================================
         tabBarStyle: {
           position: "absolute",
-          bottom: 25, // Un poco más arriba para lucir como la imagen
+          bottom: 25,
           left: 20,
           right: 20,
-          borderRadius: 24, // Bordes más redondeados tipo píldora
-          height: 70, // Altura ideal para albergar el botón central
-          backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#ffffff",
+          borderRadius: 24,
+          height: 70,
+          backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#f1f1f1",
           borderTopWidth: 0,
 
-          // Sombras pronunciadas para diferenciar el dock del fondo
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 6 },
           shadowOpacity: 0.15,
           shadowRadius: 12,
-          elevation: 8, // Sombra marcada en Android
+          elevation: 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
@@ -52,12 +56,11 @@ export default function TabLayout() {
           marginTop: 6,
         },
       }}>
-      {/* Pestaña Izquierda */}
       <Tabs.Screen
         name="index"
         options={{
-          title: "Tab One",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Inicio",
+          tabBarIcon: ({ color }) => <IonIcon name="grid" color={color} />,
           headerRight: () => (
             <Link href="/modal" asChild>
               <Pressable>
@@ -71,6 +74,16 @@ export default function TabLayout() {
                 )}
               </Pressable>
             </Link>
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="receipts"
+        options={{
+          title: "Tickets",
+          tabBarIcon: ({ color }) => (
+            <IonIcon name="receipt-outline" color={color} />
           ),
         }}
       />
@@ -109,12 +122,23 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Pestaña Derecha */}
       <Tabs.Screen
-        name="two"
+        name="invoices"
         options={{
-          title: "Tab Two",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: "Reportes",
+          tabBarIcon: ({ color }) => (
+            <IonIcon name="bar-chart-outline" color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Perfil",
+          tabBarIcon: ({ color }) => (
+            <IonIcon name="person-outline" color={color} />
+          ),
         }}
       />
     </Tabs>
