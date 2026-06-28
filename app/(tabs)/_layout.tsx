@@ -3,6 +3,8 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Link, Tabs } from "expo-router";
 import { Pressable, View } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { useFiscalInfoSetup } from "@/src/features/fiscal-info/infrastructure/hooks/useFiscalInfoSetup";
+import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
@@ -20,6 +22,8 @@ function IonIcon(props: { name: IoniconName; color: string }) {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { triggerCapture } = useCaptureContext();
+  const { needsSetup, isLoading, submit, isSubmitting, submitSuccess } =
+    useFiscalInfoSetup();
 
   return (
     <>
@@ -38,11 +42,7 @@ export default function TabLayout() {
             backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#f1f1f1",
             borderTopWidth: 0,
 
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 6 },
-            shadowOpacity: 0.15,
-            shadowRadius: 12,
-            elevation: 8,
+            boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)",
           },
           tabBarLabelStyle: {
             fontSize: 12,
@@ -106,11 +106,7 @@ export default function TabLayout() {
                     backgroundColor: "#3b42e4",
                     justifyContent: "center",
                     alignItems: "center",
-                    shadowColor: "#000",
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.2,
-                    shadowRadius: 3,
-                    elevation: 3,
+                    boxShadow: "0px 2px 3px rgba(0, 0, 0, 0.2)",
                   }}>
                   <FontAwesome name="camera" size={22} color="#ffffff" />
                 </View>
@@ -140,6 +136,11 @@ export default function TabLayout() {
         />
       </Tabs>
       <WebCaptureModal />
+      <FiscalInfoSetupModal
+        visible={needsSetup && !isLoading}
+        onSubmit={submit}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 }
