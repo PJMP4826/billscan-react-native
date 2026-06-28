@@ -1,13 +1,29 @@
-import {
-  Modal,
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  ScrollView,
-} from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from "@/components/ui/modal";
+import { Button, ButtonText } from "@/components/ui/button";
+import { Heading } from "@/components/ui/heading";
+import {
+  FormControl,
+  FormControlError,
+  FormControlErrorText,
+  FormControlLabel,
+  FormControlLabelText,
+} from "@/components/ui/form-control";
+import { Input, InputField } from "@/components/ui/input";
 import {
   FiscalInfoPayload,
   fiscalInfoSchema,
@@ -25,6 +41,8 @@ export const FiscalInfoSetupModal = ({
   onSubmit,
   isSubmitting,
 }: Props) => {
+  const { width, height } = useWindowDimensions();
+
   const {
     control,
     handleSubmit,
@@ -43,145 +61,181 @@ export const FiscalInfoSetupModal = ({
   });
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
-      <View className="flex-1 justify-end bg-black/50">
-        <View className="bg-white rounded-t-3xl p-6">
-          <Text className="text-xl font-bold mb-4">
-            Configura tu información fiscal
-          </Text>
+    <Modal isOpen={visible}>
+      <ModalBackdrop />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          paddingHorizontal: 16,
+        }}>
+        <ModalContent
+          style={{
+            width: width - 32, // full screen width minus 16px padding each side
+            maxHeight: height * 0.8, // 80% of screen height
+          }}>
+          <ModalHeader>
+            <Heading size="lg">Configura tu información fiscal</Heading>
+          </ModalHeader>
 
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Controller
-              control={control}
-              name="rfc"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-sm text-gray-600 mb-1">RFC</Text>
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                    value={value}
-                    onChangeText={onChange}
-                    autoCapitalize="characters"
-                    maxLength={13}
-                    placeholder="XAXX010101000"
-                  />
-                  {errors.rfc && (
-                    <Text className="text-red-500 text-xs mt-1">
-                      {errors.rfc.message}
-                    </Text>
-                  )}
-                </View>
-              )}
-            />
+          <ModalBody>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
+              {/* RFC */}
+              <Controller
+                control={control}
+                name="rfc"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl isInvalid={!!errors.rfc} className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>RFC</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                      <InputField
+                        value={value}
+                        onChangeText={onChange}
+                        autoCapitalize="characters"
+                        maxLength={13}
+                        placeholder="XAXX010101000"
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors.rfc?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="razon_social"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-sm text-gray-600 mb-1">
-                    Razón Social
-                  </Text>
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                    value={value}
-                    onChangeText={onChange}
-                    placeholder="Mi Empresa S.A. de C.V."
-                  />
-                  {errors.razon_social && (
-                    <Text className="text-red-500 text-xs mt-1">
-                      {errors.razon_social.message}
-                    </Text>
-                  )}
-                </View>
-              )}
-            />
+              {/* Razón Social */}
+              <Controller
+                control={control}
+                name="razon_social"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl
+                    isInvalid={!!errors.razon_social}
+                    className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>Razón Social</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                      <InputField
+                        value={value}
+                        onChangeText={onChange}
+                        placeholder="Mi Empresa S.A. de C.V."
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors.razon_social?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-sm text-gray-600 mb-1">
-                    Email fiscal
-                  </Text>
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                    value={value}
-                    onChangeText={onChange}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    placeholder="contacto@empresa.mx"
-                  />
-                  {errors.email && (
-                    <Text className="text-red-500 text-xs mt-1">
-                      {errors.email.message}
-                    </Text>
-                  )}
-                </View>
-              )}
-            />
+              {/* Email */}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl isInvalid={!!errors.email} className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>Email fiscal</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                      <InputField
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        placeholder="contacto@empresa.mx"
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors.email?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="cp"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-sm text-gray-600 mb-1">
-                    Código Postal
-                  </Text>
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                    value={value}
-                    onChangeText={onChange}
-                    keyboardType="numeric"
-                    maxLength={5}
-                    placeholder="86000"
-                  />
-                  {errors.cp && (
-                    <Text className="text-red-500 text-xs mt-1">
-                      {errors.cp.message}
-                    </Text>
-                  )}
-                </View>
-              )}
-            />
+              {/* CP */}
+              <Controller
+                control={control}
+                name="cp"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl isInvalid={!!errors.cp} className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>Código Postal</FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                      <InputField
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="numeric"
+                        maxLength={5}
+                        placeholder="86000"
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors.cp?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                )}
+              />
 
-            <Controller
-              control={control}
-              name="regimen_code"
-              render={({ field: { onChange, value } }) => (
-                <View className="mb-4">
-                  <Text className="text-sm text-gray-600 mb-1">
-                    Código de Régimen Fiscal
-                  </Text>
-                  <TextInput
-                    className="border border-gray-300 rounded-lg px-3 py-2"
-                    value={value}
-                    onChangeText={onChange}
-                    keyboardType="numeric"
-                    placeholder="601"
-                  />
-                  {errors.regimen_code && (
-                    <Text className="text-red-500 text-xs mt-1">
-                      {errors.regimen_code.message}
-                    </Text>
-                  )}
-                </View>
-              )}
-            />
+              {/* Régimen Fiscal */}
+              <Controller
+                control={control}
+                name="regimen_code"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl
+                    isInvalid={!!errors.regimen_code}
+                    className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>
+                        Código de Régimen Fiscal
+                      </FormControlLabelText>
+                    </FormControlLabel>
+                    <Input>
+                      <InputField
+                        value={value}
+                        onChangeText={onChange}
+                        keyboardType="numeric"
+                        placeholder="601"
+                      />
+                    </Input>
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {errors.regimen_code?.message}
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                )}
+              />
+            </ScrollView>
+          </ModalBody>
 
-            <Pressable
+          <ModalFooter>
+            <Button
               onPress={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
-              className="bg-blue-600 rounded-lg py-3 mt-2">
-              <Text className="text-white text-center font-semibold">
+              isDisabled={isSubmitting}
+              className="flex-1">
+              <ButtonText>
                 {isSubmitting ? "Guardando..." : "Guardar información fiscal"}
-              </Text>
-            </Pressable>
-          </ScrollView>
-        </View>
-      </View>
+              </ButtonText>
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
