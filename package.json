@@ -12,6 +12,7 @@
     "@dariyd/react-native-document-scanner": "^2.0.19",
     "@expo/vector-icons": "^15.0.3",
     "@react-navigation/native": "^7.1.8",
+    "@tanstack/react-query": "^5.101.2",
     "expo": "~54.0.33",
     "expo-camera": "~17.0.10",
     "expo-constants": "~18.0.13",
