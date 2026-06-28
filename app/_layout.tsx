@@ -24,8 +24,9 @@ export const unstable_settings = {
 };
 import { CaptureProvider } from "@/src/features/capture/context/CaptureContext";
 
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
-import '@/global.css';
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import "@/global.css";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -59,19 +60,23 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    
-    <GluestackUIProvider mode="light">
-      <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <CaptureProvider>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-          </Stack>
-        </CaptureProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
-    </GluestackUIProvider>
-  
+    <SafeAreaProvider>
+      <GluestackUIProvider mode="light">
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+            <CaptureProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="modal"
+                  options={{ presentation: "modal" }}
+                />
+              </Stack>
+            </CaptureProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
+      </GluestackUIProvider>
+    </SafeAreaProvider>
   );
 }
