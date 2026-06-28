@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 import { CaptureWebSource } from "../../domain/enums/CaptureWebSource";
-import { PermissionDeniedError } from "../../domain/errors/PermissionDeniedError";
+import { PermissionDeniedError } from "../../../../shared/errors/PermissionDeniedError";
 import { ImageCapturePort } from "../../domain/ports/ImageCapturePort";
 import { CapturedImage } from "../../domain/value_objects/CapturedImage";
 
