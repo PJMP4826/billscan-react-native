@@ -5,10 +5,10 @@ import { Pressable, View } from "react-native";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useFiscalInfoSetup } from "@/src/features/fiscal-info/infrastructure/hooks/useFiscalInfoSetup";
 import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
+import { AppHeader } from "@/components/AppHeader";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { WebCaptureModal } from "@/src/features/capture/components/WebCaptureModal";
 
@@ -30,7 +30,12 @@ export default function TabLayout() {
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-          headerShown: useClientOnlyValue(false, true),
+          headerShown: true,
+          headerTitle: () => <AppHeader />,
+          headerTitleContainerStyle: { width: "100%" },
+          headerTitleAlign: "left",
+          headerStyle: { backgroundColor: "#1E40AF" },
+          headerShadowVisible: false,
 
           tabBarStyle: {
             position: "absolute",
@@ -58,20 +63,6 @@ export default function TabLayout() {
           options={{
             title: "Inicio",
             tabBarIcon: ({ color }) => <IonIcon name="grid" color={color} />,
-            headerRight: () => (
-              <Link href="/modal" asChild>
-                <Pressable>
-                  {({ pressed }) => (
-                    <FontAwesome
-                      name="info-circle"
-                      size={25}
-                      color={Colors[colorScheme ?? "light"].text}
-                      style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                    />
-                  )}
-                </Pressable>
-              </Link>
-            ),
           }}
         />
 
@@ -103,7 +94,7 @@ export default function TabLayout() {
                     width: 52,
                     height: 52,
                     borderRadius: 26,
-                    backgroundColor: "#3b42e4",
+                    backgroundColor: "#1E40AF",
                     justifyContent: "center",
                     alignItems: "center",
                     boxShadow: "0px 2px 3px rgba(0, 0, 0, 0.2)",
