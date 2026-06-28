@@ -11,7 +11,7 @@ export const fiscalInfoSchema = z.object({
     .max(13, "RFC debe tener máximo 13 caracteres")
     .toUpperCase(),
   razon_social: z.string().min(1, "Razón social requerida"),
-  email: z.string().email("Email inválido"),
+  email: z.email("Email inválido"),
   cp: z.string().length(5, "El CP debe tener exactamente 5 dígitos"),
   address: z.string().optional(),
   regimen_code: z.string().min(1, "Régimen fiscal requerido"),
