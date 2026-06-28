@@ -43,30 +43,35 @@ export function WebCaptureModal() {
                 <CameraView ref={cameraRef} style={styles.cameraPreview} />
               ) : (
                 <Text style={styles.permissionText}>
-                  Camera permission denied. Enable it in your browser settings.
+                  Permiso de cámara denegado. Actívalo en la configuración de tu
+                  navegador.
                 </Text>
               )}
               <Pressable style={styles.captureBtn} onPress={takePicture}>
                 <Ionicons name="camera" size={20} color="#fff" />
-                <Text style={styles.captureBtnText}>Take Photo</Text>
+                <Text style={styles.captureBtnText}>Tomar foto</Text>
               </Pressable>
               <Pressable
                 style={styles.cancelBtn}
                 onPress={() => setWebMode(null)}>
-                <Text style={styles.cancelText}>← Back</Text>
+                <Text style={styles.cancelText}>← Volver</Text>
               </Pressable>
             </View>
           ) : (
             <>
-              <Text style={styles.sheetTitle}>Add Receipt</Text>
+              <Text style={styles.sheetTitle}>Agregar recibo</Text>
               <Text style={styles.sheetSubtitle}>
-                How do you want to add the image?
+                ¿Cómo deseas agregar la imagen?
               </Text>
               <Pressable style={styles.option} onPress={openWebCamera}>
                 <Ionicons name="camera-outline" size={28} color="#3b42e4" />
                 <View style={styles.optionText}>
-                  <Text style={styles.optionLabel}>Use Camera</Text>
-                  <Text style={styles.optionHint}>Take a photo right now</Text>
+                  <View style={styles.optionText}>
+                    <Text style={styles.optionLabel}>Usar cámara</Text>
+                    <Text style={styles.optionHint}>
+                      Tomar una foto ahora mismo
+                    </Text>
+                  </View>
                 </View>
               </Pressable>
               <Pressable
@@ -74,12 +79,16 @@ export function WebCaptureModal() {
                 onPress={() => captureFromWeb(CaptureWebSource.LIBRARY)}>
                 <Ionicons name="image-outline" size={28} color="#3b42e4" />
                 <View style={styles.optionText}>
-                  <Text style={styles.optionLabel}>Choose from Library</Text>
-                  <Text style={styles.optionHint}>Pick an existing image</Text>
+                  <Text style={styles.optionLabel}>
+                    Seleccionar de la galería
+                  </Text>
+                  <Text style={styles.optionHint}>
+                    Elegir una imagen existente
+                  </Text>
                 </View>
               </Pressable>
               <Pressable style={styles.cancelBtn} onPress={onClose}>
-                <Text style={styles.cancelText}>Cancel</Text>
+                <Text style={styles.cancelText}>Cancelar</Text>
               </Pressable>
             </>
           )}
