@@ -1,6 +1,6 @@
 // api/receiptsApi.ts
 import { Platform } from "react-native";
-import { client } from "../../../shared/infrastructure/adapters/http_client";
+import { client } from "../../../shared/infrastructure/adapters/http-client";
 import { CapturedImage } from "../domain/value_objects/CapturedImage";
 import { ReceiptUploadResponse } from "../domain/records/ReceiptUploadResponse";
 
