@@ -24,6 +24,9 @@ export const unstable_settings = {
 };
 import { CaptureProvider } from "@/src/features/capture/context/CaptureContext";
 
+import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
+import '@/global.css';
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient();
@@ -56,7 +59,9 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <QueryClientProvider client={queryClient}>
+    
+    <GluestackUIProvider mode="dark">
+      <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <CaptureProvider>
           <Stack>
@@ -66,5 +71,7 @@ function RootLayoutNav() {
         </CaptureProvider>
       </ThemeProvider>
     </QueryClientProvider>
+    </GluestackUIProvider>
+  
   );
 }
