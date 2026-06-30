@@ -11,6 +11,7 @@ import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { WebCaptureModal } from "@/src/features/capture/components/WebCaptureModal";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
 type MaterialIconName = React.ComponentProps<typeof MaterialIcons>["name"];
@@ -24,6 +25,7 @@ export default function TabLayout() {
   const { triggerCapture } = useCaptureContext();
   const { needsSetup, isLoading, submit, isSubmitting, submitSuccess } =
     useFiscalInfoSetup();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -39,20 +41,19 @@ export default function TabLayout() {
 
           tabBarStyle: {
             position: "absolute",
-            bottom: 25,
+            bottom: 10 + insets.bottom,
             left: 20,
             right: 20,
             borderRadius: 24,
             height: 70,
             backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#f1f1f1",
             borderTopWidth: 0,
-
+            paddingBottom: 0,
             boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)",
           },
           tabBarLabelStyle: {
             fontSize: 12,
             fontWeight: "500",
-            marginBottom: 10,
           },
           tabBarIconStyle: {
             marginTop: 6,
