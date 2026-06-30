@@ -29,6 +29,7 @@ import {
   fiscalInfoSchema,
 } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
+import RegimenFiscalDropDown from "@/src/features/fiscal-info/components/RegimenFiscalDropDown";
 
 interface Props {
   visible: boolean;
@@ -202,22 +203,14 @@ export const FiscalInfoSetupModal = ({
                     className="mb-4">
                     <FormControlLabel>
                       <FormControlLabelText>
-                        Código de Régimen Fiscal
+                        Régimen Fiscal
                       </FormControlLabelText>
                     </FormControlLabel>
-                    <Input>
-                      <InputField
-                        value={value}
-                        onChangeText={onChange}
-                        keyboardType="numeric"
-                        placeholder="601"
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors.regimen_code?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
+
+                    <RegimenFiscalDropDown
+                      selectedValue={value}
+                      onValueChange={onChange}
+                    />
                   </FormControl>
                 )}
               />
