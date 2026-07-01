@@ -12,23 +12,35 @@ interface CaptureContextValue {
   isSubmitting: boolean;
   error: CaptureImageError | null;
   webModalVisible: boolean;
-  triggerCapture: () => void;
+  billingModalVisible: boolean;
+  triggerCapture: () => Promise<void>;
   captureFromWeb: (source: CaptureWebSource) => Promise<void>;
   setWebModalVisible: (v: boolean) => void;
+  setBillingModalVisible: (v: boolean) => void;
   reset: () => void;
-  submit: () => Promise<void>;
+  openBillingOptions: () => void;
+  submit: (autoBilling: boolean) => Promise<void>;
 }
 const CaptureContext = createContext<CaptureContextValue | null>(null);
 
 export function CaptureProvider({ children }: { children: ReactNode }) {
   const { images, isCapturing, error, capture, reset } = useCapture();
   const [webModalVisible, setWebModalVisible] = useState(false);
+  const [billingModalVisible, setBillingModalVisible] = useState(false);
 
   const { submit: uploadImages, isSubmitting } = useReceiptSubmit();
 
-  const triggerCapture = () => {
+  const openBillingOptions = () => {
+    if (images.length === 0) return;
+    setBillingModalVisible(true);
+  };
+
+  const triggerCapture = async () => {
     if (Platform.OS === "android") {
-      capture();
+      const capturedImages = await capture();
+      if (capturedImages.length > 0) {
+        setBillingModalVisible(true);
+      }
     } else {
       setWebModalVisible(true);
     }
@@ -36,11 +48,15 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
 
   const captureFromWeb = async (source: CaptureWebSource) => {
     setWebModalVisible(false);
-    await capture(source);
+    const capturedImages = await capture(source);
+    if (capturedImages.length > 0) {
+      setBillingModalVisible(true);
+    }
   };
 
-  const submit = async () => {
-    await uploadImages(images);
+  const submit = async (autoBilling: boolean) => {
+    await uploadImages({ images, autoBilling });
+    setBillingModalVisible(false);
     reset();
   };
 
@@ -52,10 +68,13 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
         isSubmitting,
         error,
         webModalVisible,
+        billingModalVisible,
         triggerCapture,
         captureFromWeb,
         setWebModalVisible,
+        setBillingModalVisible,
         reset,
+        openBillingOptions,
         submit,
       }}>
       {children}
