@@ -1,8 +1,8 @@
 import * as ImagePicker from "expo-image-picker";
-import { PermissionDeniedError } from "../../../../shared/errors/PermissionDeniedError";
-import { CaptureWebSource } from "../../domain/enums/capture-web-source.enum";
-import { ImageCapturePort } from "../../domain/ports/image-capture.port";
-import { CapturedImage } from "../../domain/value_objects/captured-image.value_object";
+import { PermissionDeniedError } from "@/src/shared/errors/PermissionDeniedError";
+import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-web-source.enum";
+import { ImageCapturePort } from "@/src/features/capture/domain/ports/image-capture.port";
+import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 
 export class ImagePickerService implements ImageCapturePort {
   private readonly source: CaptureWebSource;

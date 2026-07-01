@@ -1,5 +1,5 @@
-import { ImageCapturePort } from "../../domain/ports/image-capture.port";
-import { CapturedImage } from "../../domain/value_objects/captured-image.value_object";
+import { ImageCapturePort } from "@/src/features/capture/domain/ports/image-capture.port";
+import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 
 import {
   ImageObject,
