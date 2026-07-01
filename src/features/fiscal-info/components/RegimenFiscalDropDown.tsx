@@ -65,12 +65,9 @@ export default function RegimenFiscalDropDown({
     setShowActionsheet(true);
   };
 
-  const handleClose = () => {
-    setShowActionsheet(false);
-  };
-
   const handleSelectOption = (newValue: string) => {
     setTempPreference(newValue);
+    // console.log(newValue);
     if (onValueChange) {
       onValueChange(newValue);
     }
@@ -96,9 +93,7 @@ export default function RegimenFiscalDropDown({
         isOpen={showActionsheet}
         onClose={() => setShowActionsheet(false)}>
         <ActionsheetBackdrop />
-        <ActionsheetContent className="max-h-[75%]">
-          {" "}
-          {/* ◄ Limitamos la altura máxima para forzar el scroll */}
+        <ActionsheetContent className="max-h-[85%]">
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
@@ -109,6 +104,7 @@ export default function RegimenFiscalDropDown({
             <ActionsheetSectionList
               sections={taxRegimeSections}
               keyExtractor={(item: any) => item.value}
+              contentContainerStyle={{ paddingBottom: 40 }}
               // Cómo se pinta el título de cada grupo
               renderSectionHeader={({ section: { title } }: any) => (
                 <ActionsheetSectionHeaderText className="bg-background-0 pt-4 pb-2">
