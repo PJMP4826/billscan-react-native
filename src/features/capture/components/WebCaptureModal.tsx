@@ -1,9 +1,9 @@
+import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
+import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-web-source.enum";
 import { Ionicons } from "@expo/vector-icons";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useRef, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
-import { CaptureWebSource } from "@/src/features/capture/domain/enums/CaptureWebSource";
 
 export function WebCaptureModal() {
   const { webModalVisible, setWebModalVisible, captureFromWeb } =
