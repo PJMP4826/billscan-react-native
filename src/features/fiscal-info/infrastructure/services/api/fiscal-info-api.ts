@@ -20,12 +20,13 @@ const mockApiResponse = {
 };
 
 export const fiscalInfoApi = {
-  //   get: () => client.get<FiscalInfoResponse>("/fiscal-info"),
-  get: async () => {
-    const error: any = new Error("Fiscal info not found");
-    error.status = 404;
-    throw error;
-  },
+  get: () => client.get<FiscalInfoResponse>("/fiscal-info"),
+  // get: async () => {
+  //   const error: any = new Error("Fiscal info not found");
+  //   error.status = 404;
+  //   throw error;
+  // },
+  // get: async () => mockApiResponse,
   create: (payload: FiscalInfoPayload) =>
     client.post<FiscalInfoCreatedResponse>("/fiscal-info", payload),
 };
