@@ -1,7 +1,6 @@
 import { Button, Image, StyleSheet, View } from "react-native";
-import { useReceiptSubmit } from "../../../hooks/useReceiptSubmit";
-import { CapturedImage } from "../domain/value_objects/CapturedImage";
 import { useCaptureContext } from "../context/CaptureContext";
+import { CapturedImage } from "../domain/value_objects/captured-image.value_object";
 
 type CaptureScreenProps = {
   images: CapturedImage[];

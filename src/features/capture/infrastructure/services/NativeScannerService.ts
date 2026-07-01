@@ -1,9 +1,9 @@
 import { ImageCapturePort } from "../../domain/ports/image-capture.port";
-import { CapturedImage } from "../../domain/value_objects/CapturedImage";
+import { CapturedImage } from "../../domain/value_objects/captured-image.value_object";
 
 import {
-    ImageObject,
-    launchScanner,
+  ImageObject,
+  launchScanner,
 } from "@dariyd/react-native-document-scanner";
 
 export class NativeScannerService implements ImageCapturePort {

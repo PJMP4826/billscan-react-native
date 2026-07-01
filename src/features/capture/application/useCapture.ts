@@ -1,7 +1,7 @@
 import { CaptureImageError } from "@/src/shared/errors/CaptureImageError";
 import { useState } from "react";
 import { CaptureWebSource } from "../domain/enums/capture-web-source.enum";
-import { CapturedImage } from "../domain/value_objects/CapturedImage";
+import { CapturedImage } from "../domain/value_objects/captured-image.value_object";
 import { createCaptureService } from "../infrastructure/factories/CaptureServiceFactory";
 
 interface UseCaptureReturn {
