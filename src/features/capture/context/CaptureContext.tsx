@@ -1,7 +1,7 @@
 import { useCapture } from "@/src/features/capture/application/useCapture";
 import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-web-source.enum";
 import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
-import { useReceiptSubmit } from "@/src/hooks/useReceiptSubmit";
+import { useReceiptSubmit } from "@/src/features/capture/infrastructure/hooks/useReceiptSubmit";
 import { CaptureImageError } from "@/src/shared/errors/CaptureImageError";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Platform } from "react-native";
