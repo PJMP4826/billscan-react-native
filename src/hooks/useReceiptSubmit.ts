@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { receiptsApi } from "../features/capture/api/receiptsApi";
 import { CapturedImage } from "../features/capture/domain/value_objects/captured-image.value_object";
+import { receiptsApi } from "../features/capture/infrastructure/services/api/receiptsApi";
 
 export function useReceiptSubmit() {
   const queryClient = useQueryClient();

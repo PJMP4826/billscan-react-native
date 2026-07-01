@@ -1,8 +1,7 @@
-// api/receiptsApi.ts
 import { Platform } from "react-native";
-import { client } from "../../../shared/infrastructure/adapters/http-client";
-import { ReceiptUploadResponse } from "../domain/records/ReceiptUploadResponse";
-import { CapturedImage } from "../domain/value_objects/captured-image.value_object";
+import { client } from "../../../../../shared/infrastructure/adapters/http-client";
+import { ReceiptUploadResponse } from "../../../domain/records/ReceiptUploadResponse";
+import { CapturedImage } from "../../../domain/value_objects/captured-image.value_object";
 
 const buildFormData = async (images: CapturedImage[]): Promise<FormData> => {
   const formData = new FormData();
