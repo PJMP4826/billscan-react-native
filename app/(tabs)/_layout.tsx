@@ -1,16 +1,17 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Link, Tabs } from "expo-router";
-import { Pressable, View } from "react-native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { useFiscalInfoSetup } from "@/src/features/fiscal-info/infrastructure/hooks/useFiscalInfoSetup";
-import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
 import { AppHeader } from "@/components/AppHeader";
+import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
+import { useFiscalInfoSetup } from "@/src/features/fiscal-info/infrastructure/hooks/useFiscalInfoSetup";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { Tabs } from "expo-router";
+import React from "react";
+import { Pressable, View } from "react-native";
 
-import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
-import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
+import Colors from "@/constants/Colors";
+import { CaptureBillingModal } from "@/src/features/capture/components/CaptureBillingModal";
 import { WebCaptureModal } from "@/src/features/capture/components/WebCaptureModal";
+import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
@@ -128,6 +129,7 @@ export default function TabLayout() {
         />
       </Tabs>
       <WebCaptureModal />
+      <CaptureBillingModal />
       <FiscalInfoSetupModal
         visible={needsSetup && !isLoading}
         onSubmit={submit}
