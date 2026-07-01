@@ -30,6 +30,7 @@ import {
 } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 import RegimenFiscalDropDown from "@/src/features/fiscal-info/components/RegimenFiscalDropDown";
+import InvoiceUseDropDown from "@/src/features/fiscal-info/components/InvoiceUseDropDown";
 
 interface Props {
   visible: boolean;
@@ -65,7 +66,7 @@ export const FiscalInfoSetupModal = ({
     <Modal isOpen={visible}>
       <ModalBackdrop />
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{
           flex: 1,
           justifyContent: "center",
@@ -75,7 +76,7 @@ export const FiscalInfoSetupModal = ({
         <ModalContent
           style={{
             width: width - 32, // full screen width minus 16px padding each side
-            maxHeight: height * 0.8, // 80% of screen height
+            maxHeight: height * 0.85, // 80% of screen height
           }}>
           <ModalHeader>
             <Heading size="lg">Configura tu información fiscal</Heading>
@@ -84,7 +85,10 @@ export const FiscalInfoSetupModal = ({
           <ModalBody>
             <ScrollView
               showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled">
+              keyboardShouldPersistTaps="handled"
+              contentContainerStyle={{
+                paddingBottom: 32,
+              }}>
               {/* RFC */}
               <Controller
                 control={control}
@@ -208,6 +212,28 @@ export const FiscalInfoSetupModal = ({
                     </FormControlLabel>
 
                     <RegimenFiscalDropDown
+                      selectedValue={value}
+                      onValueChange={onChange}
+                    />
+                  </FormControl>
+                )}
+              />
+
+              {/* Uso de Cfdi */}
+              <Controller
+                control={control}
+                name="use_cfdi_code_default"
+                render={({ field: { onChange, value } }) => (
+                  <FormControl
+                    isInvalid={!!errors.use_cfdi_code_default}
+                    className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>
+                        Uso de CFDI por defecto (para facturar)
+                      </FormControlLabelText>
+                    </FormControlLabel>
+
+                    <InvoiceUseDropDown
                       selectedValue={value}
                       onValueChange={onChange}
                     />
