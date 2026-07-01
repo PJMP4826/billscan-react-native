@@ -15,6 +15,11 @@ const request = async <T>(
 ): Promise<T> => {
   const isFormData = body instanceof FormData;
 
+  console.log("Haciendo fetching to: ", `${ENV.API_URL}${endpoint}`);
+  console.log("con method: ", method);
+  console.log("mandado el body: ", body);
+  console.log("y los headers: ", headers);
+
   const response = await fetch(`${ENV.API_URL}${endpoint}`, {
     method,
     headers: isFormData
@@ -22,6 +27,8 @@ const request = async <T>(
       : { "Content-Type": "application/json", ...headers },
     body: isFormData ? body : body ? JSON.stringify(body) : undefined,
   });
+
+  console.log("Response de API: ", JSON.stringify(response))
 
   if (!response.ok) {
     const error: ApiError = {
