@@ -1,21 +1,5 @@
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  useWindowDimensions,
-} from "react-native";
-import {
-  Modal,
-  ModalBackdrop,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from "@/components/ui/modal";
 import { Button, ButtonText } from "@/components/ui/button";
-import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
 import {
   FormControl,
   FormControlError,
@@ -23,14 +7,30 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from "@/components/ui/form-control";
+import { Heading } from "@/components/ui/heading";
 import { Input, InputField } from "@/components/ui/input";
+import {
+  Modal,
+  ModalBackdrop,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+} from "@/components/ui/modal";
+import InvoiceUseDropDown from "@/src/features/fiscal-info/components/InvoiceUseDropDown";
+import RegimenFiscalDropDown from "@/src/features/fiscal-info/components/RegimenFiscalDropDown";
+import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 import {
   FiscalInfoPayload,
   fiscalInfoSchema,
 } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
-import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
-import RegimenFiscalDropDown from "@/src/features/fiscal-info/components/RegimenFiscalDropDown";
-import InvoiceUseDropDown from "@/src/features/fiscal-info/components/InvoiceUseDropDown";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  useWindowDimensions,
+} from "react-native";
 
 interface Props {
   visible: boolean;
@@ -83,164 +83,184 @@ export const FiscalInfoSetupModal = ({
           </ModalHeader>
 
           <ModalBody>
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              contentContainerStyle={{
-                paddingBottom: 32,
-              }}>
-              {/* RFC */}
-              <Controller
-                control={control}
-                name="rfc"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl isInvalid={!!errors.rfc} className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>RFC</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                      <InputField
-                        value={value}
-                        onChangeText={onChange}
-                        autoCapitalize="characters"
-                        maxLength={13}
-                        placeholder="XAXX010101000"
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors.rfc?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
-                )}
-              />
-
-              {/* Razón Social */}
-              <Controller
-                control={control}
-                name="razon_social"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl
-                    isInvalid={!!errors.razon_social}
-                    className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>Razón Social</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                      <InputField
-                        value={value}
-                        onChangeText={onChange}
-                        placeholder="Mi Empresa S.A. de C.V."
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors.razon_social?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
-                )}
-              />
-
-              {/* Email */}
-              <Controller
-                control={control}
-                name="email"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl isInvalid={!!errors.email} className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>Email fiscal</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                      <InputField
-                        value={value}
-                        onChangeText={onChange}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        placeholder="contacto@empresa.mx"
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors.email?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
-                )}
-              />
-
-              {/* CP */}
-              <Controller
-                control={control}
-                name="cp"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl isInvalid={!!errors.cp} className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>Código Postal</FormControlLabelText>
-                    </FormControlLabel>
-                    <Input>
-                      <InputField
-                        value={value}
-                        onChangeText={onChange}
-                        keyboardType="numeric"
-                        maxLength={5}
-                        placeholder="86000"
-                      />
-                    </Input>
-                    <FormControlError>
-                      <FormControlErrorText>
-                        {errors.cp?.message}
-                      </FormControlErrorText>
-                    </FormControlError>
-                  </FormControl>
-                )}
-              />
-
-              {/* Régimen Fiscal */}
-              <Controller
-                control={control}
-                name="regimen_code"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl
-                    isInvalid={!!errors.regimen_code}
-                    className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>
-                        Régimen Fiscal
-                      </FormControlLabelText>
-                    </FormControlLabel>
-
-                    <RegimenFiscalDropDown
-                      selectedValue={value}
-                      onValueChange={onChange}
+            {/* RFC */}
+            <Controller
+              control={control}
+              name="rfc"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.rfc} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>RFC</FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}> *</Text>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField
+                      value={value}
+                      onChangeText={onChange}
+                      autoCapitalize="characters"
+                      maxLength={13}
+                      placeholder="XAXX010101000"
                     />
-                  </FormControl>
-                )}
-              />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>
+                      {errors.rfc?.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+              )}
+            />
 
-              {/* Uso de Cfdi */}
-              <Controller
-                control={control}
-                name="use_cfdi_code_default"
-                render={({ field: { onChange, value } }) => (
-                  <FormControl
-                    isInvalid={!!errors.use_cfdi_code_default}
-                    className="mb-4">
-                    <FormControlLabel>
-                      <FormControlLabelText>
-                        Uso de CFDI por defecto (para facturar)
-                      </FormControlLabelText>
-                    </FormControlLabel>
-
-                    <InvoiceUseDropDown
-                      selectedValue={value}
-                      onValueChange={onChange}
+            {/* Razón Social */}
+            <Controller
+              control={control}
+              name="razon_social"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.razon_social} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>Razón Social</FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}> *</Text>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField
+                      value={value}
+                      onChangeText={onChange}
+                      placeholder="Mi Empresa S.A. de C.V."
                     />
-                  </FormControl>
-                )}
-              />
-            </ScrollView>
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>
+                      {errors.razon_social?.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+              )}
+            />
+
+            {/* Email */}
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.email} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>Email fiscal</FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}> *</Text>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField
+                      value={value}
+                      onChangeText={onChange}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      placeholder="contacto@empresa.mx"
+                    />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>
+                      {errors.email?.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+              )}
+            />
+
+            {/* CP */}
+            <Controller
+              control={control}
+              name="cp"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.cp} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>Código Postal</FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}>*</Text>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField
+                      value={value}
+                      onChangeText={onChange}
+                      keyboardType="numeric"
+                      maxLength={5}
+                      placeholder="86000"
+                    />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>
+                      {errors.cp?.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+              )}
+            />
+
+            {/* Address */}
+            <Controller
+              control={control}
+              name="address"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.address} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>
+                      Dirección fiscal
+                    </FormControlLabelText>
+                  </FormControlLabel>
+                  <Input>
+                    <InputField
+                      value={value ?? ""}
+                      onChangeText={onChange}
+                      placeholder="Av. Paseo de la Reforma 123, Col. Centro"
+                    />
+                  </Input>
+                  <FormControlError>
+                    <FormControlErrorText>
+                      {errors.address?.message}
+                    </FormControlErrorText>
+                  </FormControlError>
+                </FormControl>
+              )}
+            />
+
+            {/* Régimen Fiscal */}
+            <Controller
+              control={control}
+              name="regimen_code"
+              render={({ field: { onChange, value } }) => (
+                <FormControl isInvalid={!!errors.regimen_code} className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>Régimen Fiscal</FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}> *</Text>
+                  </FormControlLabel>
+
+                  <RegimenFiscalDropDown
+                    selectedValue={value}
+                    onValueChange={onChange}
+                  />
+                </FormControl>
+              )}
+            />
+
+            {/* Uso de Cfdi */}
+            <Controller
+              control={control}
+              name="use_cfdi_code_default"
+              render={({ field: { onChange, value } }) => (
+                <FormControl
+                  isInvalid={!!errors.use_cfdi_code_default}
+                  className="mb-4">
+                  <FormControlLabel>
+                    <FormControlLabelText>
+                      Uso de CFDI por defecto (para facturar)
+                    </FormControlLabelText>
+                    <Text style={{ color: "#ef4444" }}> *</Text>
+                  </FormControlLabel>
+
+                  <InvoiceUseDropDown
+                    selectedValue={value}
+                    onValueChange={onChange}
+                  />
+                </FormControl>
+              )}
+            />
           </ModalBody>
 
           <ModalFooter>
