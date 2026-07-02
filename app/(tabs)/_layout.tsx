@@ -42,15 +42,12 @@ export default function TabLayout() {
           headerShadowVisible: false,
 
           tabBarStyle: {
-            position: "absolute",
-            bottom: 10 + insets.bottom,
-            left: 20,
-            right: 20,
-            borderRadius: 24,
-            height: 70,
-            backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#f1f1f1",
+            height: 80 + insets.bottom,
+            paddingTop: 8,
+            borderRadius: 26,
+            backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#E8E8E8",
             borderTopWidth: 0,
-            paddingBottom: 0,
+            paddingBottom: 10+insets.bottom,
             boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)",
           },
           tabBarLabelStyle: {
