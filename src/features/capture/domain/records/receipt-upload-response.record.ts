@@ -1,5 +1,5 @@
 export interface ReceiptUploadResponse {
   title?: string;
-  status: string;
+  status: number;
   message: string;
 }
