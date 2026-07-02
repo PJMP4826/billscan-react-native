@@ -10,6 +10,7 @@ import { Pressable, View } from "react-native";
 import { useColorScheme } from "@/components/useColorScheme";
 import Colors from "@/constants/Colors";
 import { CaptureBillingModal } from "@/src/features/capture/components/CaptureBillingModal";
+import { CaptureUploadResponseModal } from "@/src/features/capture/components/CaptureUploadResponseModal";
 import { WebCaptureModal } from "@/src/features/capture/components/WebCaptureModal";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -130,6 +131,7 @@ export default function TabLayout() {
       </Tabs>
       <WebCaptureModal />
       <CaptureBillingModal />
+      <CaptureUploadResponseModal />
       <FiscalInfoSetupModal
         visible={needsSetup && !isLoading}
         onSubmit={submit}
