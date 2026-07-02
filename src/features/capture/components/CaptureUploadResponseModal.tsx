@@ -1,10 +1,10 @@
 import {
-    AlertDialog,
-    AlertDialogBackdrop,
-    AlertDialogBody,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
+  AlertDialog,
+  AlertDialogBackdrop,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
 } from "@/components/ui/alert-dialog";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
@@ -92,7 +92,7 @@ export function CaptureUploadResponseModal() {
 
   return (
     <AlertDialog isOpen={responseModalVisible} onClose={handlePrimaryAction}>
-      <AlertDialogBackdrop />
+      <AlertDialogBackdrop className="bg-black/50" />
       <AlertDialogContent
         className={`w-[92%] max-w-105 overflow-hidden rounded-3xl px-0 py-0 ${tone.container} ${tone.borderColor}`}>
         <AlertDialogHeader className="px-6 pt-7">
