@@ -1,3 +1,4 @@
+import { type ReceiptUploadResponse } from "@/src/features/capture/domain/records/receipt-upload-response.record";
 import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 import { receiptsApi } from "@/src/features/capture/infrastructure/services/api/receipts-api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,13 +11,18 @@ type ReceiptSubmitVariables = {
 export function useReceiptSubmit() {
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isPending, isError, error, reset } = useMutation({
+  const { mutateAsync, isPending, isError, error, reset } = useMutation<
+    ReceiptUploadResponse,
+    Error,
+    ReceiptSubmitVariables
+  >({
     mutationFn: ({ images, autoBilling }: ReceiptSubmitVariables) =>
       receiptsApi.upload(images, autoBilling),
 
-    onSuccess: () => {
-      // invalidate the receipts list so it refetches automatically
-      queryClient.invalidateQueries({ queryKey: ["receipts"] });
+    onSuccess: (response) => {
+      if (response.status === 202) {
+        queryClient.invalidateQueries({ queryKey: ["receipts"] });
+      }
     },
   });
 
