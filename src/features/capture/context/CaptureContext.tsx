@@ -1,9 +1,10 @@
 import { useCapture } from "@/src/features/capture/application/useCapture";
 import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-web-source.enum";
+import { type ReceiptUploadResponse } from "@/src/features/capture/domain/records/receipt-upload-response.record";
 import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 import { useReceiptSubmit } from "@/src/features/capture/infrastructure/hooks/useReceiptSubmit";
 import { CaptureImageError } from "@/src/shared/errors/CaptureImageError";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 import { Platform } from "react-native";
 
 interface CaptureContextValue {
@@ -13,10 +14,13 @@ interface CaptureContextValue {
   error: CaptureImageError | null;
   webModalVisible: boolean;
   billingModalVisible: boolean;
+  responseModalVisible: boolean;
+  submissionResponse: ReceiptUploadResponse | null;
   triggerCapture: () => Promise<void>;
   captureFromWeb: (source: CaptureWebSource) => Promise<void>;
   setWebModalVisible: (v: boolean) => void;
   setBillingModalVisible: (v: boolean) => void;
+  closeResponseModal: () => void;
   reset: () => void;
   openBillingOptions: () => void;
   submit: (autoBilling: boolean) => Promise<void>;
@@ -27,12 +31,20 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
   const { images, isCapturing, error, capture, reset } = useCapture();
   const [webModalVisible, setWebModalVisible] = useState(false);
   const [billingModalVisible, setBillingModalVisible] = useState(false);
+  const [responseModalVisible, setResponseModalVisible] = useState(false);
+  const [submissionResponse, setSubmissionResponse] =
+    useState<ReceiptUploadResponse | null>(null);
 
   const { submit: uploadImages, isSubmitting } = useReceiptSubmit();
 
   const openBillingOptions = () => {
     if (images.length === 0) return;
     setBillingModalVisible(true);
+  };
+
+  const closeResponseModal = () => {
+    setResponseModalVisible(false);
+    setSubmissionResponse(null);
   };
 
   const triggerCapture = async () => {
@@ -55,9 +67,14 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
   };
 
   const submit = async (autoBilling: boolean) => {
-    await uploadImages({ images, autoBilling });
+    const response = await uploadImages({ images, autoBilling });
     setBillingModalVisible(false);
-    reset();
+    setSubmissionResponse(response);
+    setResponseModalVisible(true);
+
+    if (response.status === 202) {
+      reset();
+    }
   };
 
   return (
@@ -69,10 +86,13 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
         error,
         webModalVisible,
         billingModalVisible,
+        responseModalVisible,
+        submissionResponse,
         triggerCapture,
         captureFromWeb,
         setWebModalVisible,
         setBillingModalVisible,
+        closeResponseModal,
         reset,
         openBillingOptions,
         submit,
