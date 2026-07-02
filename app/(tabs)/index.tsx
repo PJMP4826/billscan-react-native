@@ -1,8 +1,14 @@
-import { View, Text } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { DeductibleExpensesCard } from "@/src/features/reports/components/DeductibleExpensesCard";
+
 export default function IndexScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Inicio</Text>
-    </View>
+    <ScrollView
+      className="flex-1 bg-slate-100"
+      contentContainerClassName="flex-grow px-4 py-5">
+      <View className="gap-4">
+        <DeductibleExpensesCard />
+      </View>
+    </ScrollView>
   );
 }
