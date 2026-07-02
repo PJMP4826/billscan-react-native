@@ -1,25 +1,25 @@
 {
   "expo": {
-    "name": "billscan-react-native",
-    "slug": "billscan-react-native",
+    "name": "BillScan",
+    "slug": "billscan-react",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/billscan-logo.png",
     "scheme": "billscanreactnative",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/splash-icon.png",
+      "image": "./assets/images/billscan-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0c356a"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/billscan-logo.png",
+        "backgroundColor": "#0c356a"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
@@ -28,11 +28,34 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/billscan-logo.png",
+      "config": {
+        "pwa": {
+          "name": "BillScan",
+          "shortName": "BillScan",
+          "description": "Escanea y gestiona tus facturas de forma rápida.",
+          "lang": "es-MX",
+          "startUrl": "/",
+          "display": "standalone",
+          "orientation": "portrait",
+          "backgroundColor": "#0c356a",
+          "themeColor": "#0c356a",
+          "icons": [
+            {
+              "src": "./assets/images/billscan-logo.png",
+              "sizes": "192x192",
+              "type": "image/png"
+            },
+            {
+              "src": "./assets/images/billscan-logo.png",
+              "sizes": "512x512",
+              "type": "image/png"
+            }
+          ]
+        }
+      }
     },
-    "plugins": [
-      "expo-router"
-    ],
+    "plugins": ["expo-router"],
     "experiments": {
       "typedRoutes": true
     },
