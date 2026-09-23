@@ -1,6 +1,6 @@
 export const queryKeys = {
-  deductibleExpenses: {
-    detail: () => ["reports", "deductible-expenses"] as const,
+  receiptsCount: {
+    detail: () => ["reports", "receipts-count"] as const,
   },
   recentActivity: {
     list: () => ["reports", "recent-activity"] as const,

@@ -1,12 +1,12 @@
 import { queryKeys } from "@/src/features/reports/infrastructure/constants/queryKeys";
-import { deductibleExpenses } from "@/src/features/reports/infrastructure/services/api/reports-api";
+import { receiptsCount } from "@/src/features/reports/infrastructure/services/api/reports-api";
 import { useQuery } from "@tanstack/react-query";
 
-export const useDeductibleExpensesQuery = () =>
+export const useReceiptsCountQuery = () =>
   useQuery({
-    queryKey: queryKeys.deductibleExpenses.detail(),
+    queryKey: queryKeys.receiptsCount.detail(),
     queryFn: async () => {
-      const response = await deductibleExpenses.get();
+      const response = await receiptsCount.get();
 
       return response.data;
     },

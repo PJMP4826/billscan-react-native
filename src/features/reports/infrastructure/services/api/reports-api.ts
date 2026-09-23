@@ -1,10 +1,9 @@
-import type { DeductibleExpensesResponse } from "@/src/features/reports/infrastructure/schemas/deductible-expenses.schema";
 import type { RecentActivityResponse } from "@/src/features/reports/infrastructure/schemas/recent-activity.schema";
+import type { ReceiptsCountResponse } from "@/src/features/reports/infrastructure/schemas/receipts-count.schema";
 import { client } from "@/src/shared/infrastructure/adapters/http-client";
 
-export const deductibleExpenses = {
-  get: () =>
-    client.get<DeductibleExpensesResponse>("/reporting/deductible-expenses"),
+export const receiptsCount = {
+  get: () => client.get<ReceiptsCountResponse>("/reporting/receipts/count"),
 };
 
 export const recentActivity = {
