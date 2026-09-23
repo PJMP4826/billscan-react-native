@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "BillScan",
-    "slug": "billscan-react",
+    "slug": "billscan-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/billscan-logo.png",
