@@ -2,6 +2,7 @@ import { ScrollView, View } from "react-native";
 import { ReceiptsCountCard } from "@/src/features/reports/components/ReceiptsCountCard";
 import { RecentActivityList } from "@/src/features/reports/components/RecentActivityList";
 import { TotalSpentCard } from "@/src/features/reports/components/TotalSpentCard";
+import { MonthlyInvoicingCard } from "@/src/features/reports/components/MonthlyInvoicingCard";
 
 export default function IndexScreen() {
   return (
@@ -11,6 +12,7 @@ export default function IndexScreen() {
       <View className="gap-4">
         <ReceiptsCountCard />
         <TotalSpentCard />
+        <MonthlyInvoicingCard />
         <RecentActivityList />
       </View>
     </ScrollView>
