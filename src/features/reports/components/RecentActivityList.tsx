@@ -64,7 +64,7 @@ export function RecentActivityList() {
 
               return (
                 <View
-                  key={`${item.merchant}-${item.createdAtLabel}-${item.totalLabel}`}
+                  key={`${item.merchant}-${item.createdAtLabel}-${item.totalLabel}-${index}`}
                   className={`flex-row items-center justify-between gap-4 py-4 ${
                     !isLast ? "border-b border-slate-100" : ""
                   }`}>
