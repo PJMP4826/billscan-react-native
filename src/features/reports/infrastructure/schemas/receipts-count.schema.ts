@@ -1,4 +1,4 @@
-import type { ReceiptsCount } from "@/src/features/reports/domain/records/receipts-count.record";
+import type { ReceiptsCountDto } from "@/src/features/reports/application/dtos/receipts-count.dto";
 
 export interface ReceiptsCountApiItem {
   total: string;
@@ -12,9 +12,9 @@ export interface ReceiptsCountResponse {
   data: ReceiptsCountApiItem;
 }
 
-export const mapReceiptsCountApiItemToRecord = (
+export const mapReceiptsCountApiItemToDto = (
   item: ReceiptsCountApiItem,
-): ReceiptsCount => ({
+): ReceiptsCountDto => ({
   total: item.total,
   billableCount: item.facturables,
   nonBillableCount: item.no_facturables,

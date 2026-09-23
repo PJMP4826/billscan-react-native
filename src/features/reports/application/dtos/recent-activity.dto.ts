@@ -1,4 +1,4 @@
-export interface RecentActivity {
+export interface RecentActivityDto {
   merchant: string;
   fileUrl: string;
   createdAt: string;

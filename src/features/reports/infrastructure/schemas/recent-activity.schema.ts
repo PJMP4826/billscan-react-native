@@ -1,4 +1,4 @@
-import type { RecentActivity } from "@/src/features/reports/domain/records/recent-activity.record";
+import type { RecentActivityDto } from "@/src/features/reports/application/dtos/recent-activity.dto";
 
 export interface RecentActivityApiItem {
   comercio: string;
@@ -12,9 +12,9 @@ export interface RecentActivityResponse {
   data: RecentActivityApiItem[];
 }
 
-export const mapRecentActivityApiItemToRecord = (
+export const mapRecentActivityApiItemToDto = (
   item: RecentActivityApiItem,
-): RecentActivity => ({
+): RecentActivityDto => ({
   merchant: item.comercio,
   fileUrl: item.file_url,
   createdAt: item.fecha_alta,

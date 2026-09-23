@@ -1,4 +1,4 @@
-import { mapReceiptsCountApiItemToRecord } from "@/src/features/reports/infrastructure/schemas/receipts-count.schema";
+import { mapReceiptsCountApiItemToDto } from "@/src/features/reports/infrastructure/schemas/receipts-count.schema";
 import { useReceiptsCountQuery } from "@/src/features/reports/infrastructure/repositories/receipts-count.repository";
 
 export const useReceiptsCount = () => {
@@ -6,7 +6,7 @@ export const useReceiptsCount = () => {
 
   return {
     receiptsCount: query.data
-      ? mapReceiptsCountApiItemToRecord(query.data)
+      ? mapReceiptsCountApiItemToDto(query.data)
       : null,
     isLoading: query.isLoading,
     isError: query.isError,
