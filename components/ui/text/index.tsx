@@ -1,7 +1,6 @@
 import React from 'react';
-
+import { Text as RNText, Platform } from 'react-native';
 import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { Text as RNText } from 'react-native';
 import { textStyle } from './styles';
 
 type ITextProps = React.ComponentProps<typeof RNText> &
@@ -19,6 +18,8 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
       sub,
       italic,
       highlight,
+      style,
+      children, // <-- Extraemos los children del resto de las props
       ...props
     },
     ref
@@ -36,9 +37,15 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
           highlight: highlight as boolean,
           class: className,
         })}
+        // includeFontPadding: false sigue siendo útil para el centrado vertical en Android
+        style={[Platform.OS === 'android' && { includeFontPadding: false }, style]}
         {...props}
         ref={ref}
-      />
+      >
+        {children}
+        {/* Inyección global del parche para el recorte en Android */}
+        {Platform.OS === 'android' ? ' ' : null}
+      </RNText>
     );
   }
 );

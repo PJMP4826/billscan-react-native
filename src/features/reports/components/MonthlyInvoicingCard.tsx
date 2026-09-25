@@ -6,7 +6,6 @@ import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { View } from "react-native";
-// Asumiendo que crearás este hook o usarás uno similar
 import { useMonthlyInvoicing } from "@/src/features/reports/application/useMonthlyInvoicing";
 
 export function MonthlyInvoicingCard() {
@@ -34,8 +33,8 @@ export function MonthlyInvoicingCard() {
 
           {/* Status Badge */}
           <View className="rounded-full bg-[#E6FFFA] px-3 py-1.5">
-            <Text className="text-xs font-semibold tracking-wide text-[#047857]">
-              {isLoading ? "Cargando..." : "Resumen de Facturación"}
+            <Text className="text-xs font-normal tracking-wide text-[#047857]">
+              {isLoading ? "Cargando..." : "Resumen de Facturación"} {" "}
             </Text>
           </View>
         </HStack>
