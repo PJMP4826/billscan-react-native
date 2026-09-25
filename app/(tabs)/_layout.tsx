@@ -35,19 +35,15 @@ export default function TabLayout() {
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
           headerShown: true,
-          headerTitle: () => <AppHeader />,
-          headerTitleContainerStyle: { width: "100%" },
-          headerTitleAlign: "left",
-          headerStyle: { backgroundColor: "#1E40AF" },
-          headerShadowVisible: false,
-
+          header: () => <AppHeader />,
+          
           tabBarStyle: {
             height: 80 + insets.bottom,
             paddingTop: 8,
             borderRadius: 26,
             backgroundColor: colorScheme === "dark" ? "#1c1c1e" : "#E8E8E8",
             borderTopWidth: 0,
-            paddingBottom: 10+insets.bottom,
+            paddingBottom: 10 + insets.bottom,
             boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)",
           },
           tabBarLabelStyle: {

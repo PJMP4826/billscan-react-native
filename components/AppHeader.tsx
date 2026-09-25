@@ -1,18 +1,37 @@
-import { getCurrentPeriod } from "@/src/utils/date-formatter";
-import { toSentenceCase } from "@/src/utils/sentence-formatter";
-import { View, Text } from "react-native";
+import AccountAvatar from "@/src/shared/components/AccountAvatar";
+import { useFiscalInfoQuery } from "@/src/features/fiscal-info/infrastructure/repositories/fiscal-info.repository";
+import { View } from "react-native";
+import { Text } from "@/components/ui/text";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Heading } from "./ui/heading";
 
 export const AppHeader = () => {
-  const period = getCurrentPeriod();
+  const { data: fiscalInfo } = useFiscalInfoQuery();
+  const accountName = fiscalInfo?.razon_social ?? "Usuario";
+  const insets = useSafeAreaInsets();
 
   return (
-    <View className="flex-row items-center justify-between w-full px-2">
-      <Text className="text-white text-2xl font-black tracking-tight">
-        BillScan
-      </Text>
-      <Text className="text-white text-sm font-bold opacity-90">
-        {toSentenceCase(period)}
-      </Text>
+    <View style={{ paddingTop: insets.top, backgroundColor: "#1E40AF" }}>
+      {/* Contenedor interno con altura fija (h-14 = 56px) sin paddings extraños */}
+      <View className="flex-row items-center justify-between w-full h-14 px-4">
+        {/* Columna Izquierda */}
+        <View className="flex-1 items-start justify-center">
+          <AccountAvatar name={accountName} size="sm" />
+        </View>
+
+        {/* Título Central */}
+
+        {/* <Text className="text-white text-2xl font-normal tracking-tight text-center px-4">
+            BillScan
+          </Text> */}
+
+        <Heading className="text-white text-[22px] font-normal text-center px-5">
+          BillScan
+        </Heading>
+
+        {/* Columna Derecha (Spacer) */}
+        <View className="flex-1" />
+      </View>
     </View>
   );
 };
