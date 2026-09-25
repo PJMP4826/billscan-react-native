@@ -1,6 +1,10 @@
-import { View, Text } from "react-native";
+import { ReceiptsListCard } from "@/src/features/receipts/components/ReceiptsListCard";
+import { ScreenContainer } from "@/src/shared/components/ScreenContainer";
+
 export default function GastosScreen() {
-  return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>Tickets</Text>
-  </View>;
+  return (
+    <ScreenContainer title="Detalle de Gastos" showBackButton={false}>
+      <ReceiptsListCard />
+    </ScreenContainer>
+  );
 }
