@@ -1,7 +1,6 @@
 import AccountAvatar from "@/src/shared/components/AccountAvatar";
 import { useFiscalInfoQuery } from "@/src/features/fiscal-info/infrastructure/repositories/fiscal-info.repository";
 import { View } from "react-native";
-import { Text } from "@/components/ui/text";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Heading } from "./ui/heading";
 
@@ -16,7 +15,7 @@ export const AppHeader = () => {
       <View className="flex-row items-center justify-between w-full h-14 px-4">
         {/* Columna Izquierda */}
         <View className="flex-1 items-start justify-center">
-          <AccountAvatar name={accountName} size="sm" />
+          <AccountAvatar name={accountName}/>
         </View>
 
         {/* Título Central */}
