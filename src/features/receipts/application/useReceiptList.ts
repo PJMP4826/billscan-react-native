@@ -12,6 +12,7 @@ export interface ReceiptListItemViewModel {
   statusLabel: string;
   totalLabel: string;
   registeredAtLabel: string;
+  fileUrl: string;
 }
 
 const formatCurrency = (value: string) => {
@@ -56,6 +57,7 @@ const mapReceiptToViewModel = (
   statusLabel: getReceiptStatusDescription(receipt.status),
   totalLabel: formatCurrency(receipt.total),
   registeredAtLabel: formatDateLabel(receipt.registeredAt),
+  fileUrl: receipt.fileUrl,
 });
 
 interface UseReceiptListOptions {
@@ -72,9 +74,7 @@ export const useReceiptList = ({
   const query = useReceiptsQuery(page, pageSize, status);
 
   return {
-    receipts: query.data
-      ? query.data.receipts.map(mapReceiptToViewModel)
-      : [],
+    receipts: query.data ? query.data.receipts.map(mapReceiptToViewModel) : [],
     total: query.data?.total ?? 0,
     page: query.data?.page ?? page,
     pageSize: query.data?.pageSize ?? pageSize,

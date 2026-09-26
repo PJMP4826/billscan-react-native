@@ -6,6 +6,7 @@ export interface ReceiptDto {
   registeredAt: string;
   total: string;
   status: ReceiptStatus;
+  fileUrl: string;
 }
 
 export interface ReceiptsPageDto {
