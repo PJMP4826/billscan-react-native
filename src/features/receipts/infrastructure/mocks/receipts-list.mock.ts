@@ -7,6 +7,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 05:11:56",
     total: "36.00",
     estado: "COMPLETED",
+    file_url: "",
   },
   {
     receipt_uuid: "864cce3acf854f6fbcce3f030de15b35",
@@ -14,6 +15,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 05:11:52",
     total: "139.90",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "37348a21bab649429916946b26a4d789",
@@ -21,6 +23,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 05:11:40",
     total: "0.00",
     estado: "COMPLETED",
+    file_url: "",
   },
   {
     receipt_uuid: "7de9215692654d98a94ee5264a479b50",
@@ -28,6 +31,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 05:11:34",
     total: "535.05",
     estado: "NOT_ELIGIBLE",
+    file_url: "",
   },
   {
     receipt_uuid: "ef79ea4cb0894e96a5a93e7a73546791",
@@ -35,6 +39,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 03:53:02",
     total: "36.00",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "f62776b01e1b4cc98223997772306010",
@@ -42,6 +47,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 03:52:50",
     total: "139.90",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "7ffc3e469cd84200ba0d21edc18428c9",
@@ -49,6 +55,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 03:52:39",
     total: "0.00",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "f1ca1d68ca3c4a2090c21b211636a5df",
@@ -56,6 +63,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-24 03:52:30",
     total: "535.05",
     estado: "NOT_ELIGIBLE",
+    file_url: "",
   },
   {
     receipt_uuid: "840bf2346ca34fdda2da5872e3ff3de3",
@@ -63,6 +71,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-23 23:39:08",
     total: "36.00",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "9c47f8a49a5a4a7d83242767257cd307",
@@ -70,6 +79,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-23 23:39:05",
     total: "139.90",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "0b551f4ef65b4562bec0f0c6f2e635c6",
@@ -77,6 +87,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-23 23:38:52",
     total: "0.00",
     estado: "PENDING",
+    file_url: "",
   },
   {
     receipt_uuid: "425e8b587d7046ee9574ef9502ad3fa3",
@@ -84,6 +95,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-08-23 23:38:46",
     total: "535.05",
     estado: "NOT_ELIGIBLE",
+    file_url: "",
   },
   {
     receipt_uuid: "facd16e2eee540c98c34aa86c345aadc",
@@ -91,6 +103,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 21:08:45",
     total: "36.00",
     estado: "PROCESSING",
+    file_url: "",
   },
   {
     receipt_uuid: "ca19b1959a5b45eba793622f228837e1",
@@ -98,6 +111,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 21:05:37",
     total: "0.00",
     estado: "FAILED",
+    file_url: "",
   },
   {
     receipt_uuid: "4c80528c86654a4d97082aebfc1f49b8",
@@ -105,6 +119,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 20:49:32",
     total: "36.00",
     estado: "COMPLETED",
+    file_url: "",
   },
   {
     receipt_uuid: "b8dcc01f3cab4b46bc599f8cf34a4638",
@@ -112,6 +127,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 20:37:03",
     total: "0.00",
     estado: "PROCESSING",
+    file_url: "",
   },
   {
     receipt_uuid: "c6a8aa0ef0a349338ddfa11e262c75a3",
@@ -119,6 +135,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 20:22:44",
     total: "36.00",
     estado: "PROCESSING",
+    file_url: "",
   },
   {
     receipt_uuid: "b7d0569327a7452ea6a420fb7b132230",
@@ -126,6 +143,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 20:22:28",
     total: "20.99",
     estado: "PROCESSING",
+    file_url: "",
   },
   {
     receipt_uuid: "84a3e39a9dc54577a498fd2a9d2bf055",
@@ -133,6 +151,7 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-25 20:22:25",
     total: "0.00",
     estado: "PROCESSING",
+    file_url: "",
   },
   {
     receipt_uuid: "77859256a90a4ef4bdc4a801769ac7b3",
@@ -140,5 +159,6 @@ export const receiptsListMockItems: ReceiptApiItem[] = [
     fecha_registro: "2026-06-21 21:39:43",
     total: "36.00",
     estado: "COMPLETED",
+    file_url: "",
   },
 ];
