@@ -15,17 +15,21 @@ export class MockReceiptsReadModel implements ReceiptsReadModelPort {
   async getReceipts(params: GetReceiptsParams = {}): Promise<ReceiptsPageDto> {
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
+    const { status } = params;
 
     await new Promise((resolve) => setTimeout(resolve, MOCK_LATENCY_MS));
 
-    const total = receiptsListMockItems.length;
+    const items = status
+      ? receiptsListMockItems.filter((item) => item.estado === status)
+      : receiptsListMockItems;
+    const total = items.length;
     const totalPages = Math.max(1, Math.ceil(total / pageSize));
     const start = (page - 1) * pageSize;
 
     const response: ReceiptsListResponse = {
       status: 200,
       data: {
-        receipts: receiptsListMockItems.slice(start, start + pageSize),
+        receipts: items.slice(start, start + pageSize),
         total,
         page,
         page_size: pageSize,

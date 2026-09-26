@@ -3,7 +3,7 @@ import { View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Heading } from "@/components/ui/heading";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router"; // Asumiendo que usas expo-router
+import { useRouter } from "expo-router";
 
 interface ScreenContainerProps {
   title: string;
@@ -27,7 +27,7 @@ export function ScreenContainer({
       style={{ flex: 1, backgroundColor: "#f1f5f9" }}
       edges={["top", "left", "right"]}>
       {/* Header fijo para todas las pantallas */}
-      <View className="flex-row items-center px-4 py-4 border-b border-slate-200">
+      <View className="flex-row items-center px-4 py-1 border-b border-slate-200">
         {showBackButton && (
           <TouchableOpacity
             onPress={() => router.back()}
@@ -36,11 +36,9 @@ export function ScreenContainer({
           </TouchableOpacity>
         )}
         {/* 1. Heading Estático */}
-        <View className="flex-row items-center justify-between">
-          <Heading className="text-[24px] font-bold tracking-tight text-slate-900">
-            {title}
+          <Heading className="text-[24px] font-normal text-slate-900">
+            {title} {" "}
           </Heading>
-        </View>
       </View>
 
       {/* Contenedor dinámico donde se inyectarán las Cards u otros componentes */}

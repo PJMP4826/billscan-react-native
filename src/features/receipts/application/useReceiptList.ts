@@ -58,8 +58,18 @@ const mapReceiptToViewModel = (
   registeredAtLabel: formatDateLabel(receipt.registeredAt),
 });
 
-export const useReceiptList = (page: number = 1, pageSize: number = 20) => {
-  const query = useReceiptsQuery(page, pageSize);
+interface UseReceiptListOptions {
+  page?: number;
+  pageSize?: number;
+  status?: ReceiptStatus;
+}
+
+export const useReceiptList = ({
+  page = 1,
+  pageSize = 20,
+  status,
+}: UseReceiptListOptions = {}) => {
+  const query = useReceiptsQuery(page, pageSize, status);
 
   return {
     receipts: query.data

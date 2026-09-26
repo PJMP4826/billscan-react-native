@@ -11,7 +11,7 @@ export class HttpReceiptsReadModel implements ReceiptsReadModelPort {
     const page = params.page ?? 1;
     const pageSize = params.pageSize ?? 20;
 
-    const response = await receiptsListApi.get(page, pageSize);
+    const response = await receiptsListApi.get(page, pageSize, params.status);
 
     return mapReceiptsListResponseToDto(response);
   }

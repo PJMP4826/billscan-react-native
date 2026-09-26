@@ -84,10 +84,24 @@ const StyledUIIcon = styled(UIIcon, {
   className: 'style',
 });
 
+// El creator de gluestack envía el estado del trigger como prop `states`
+// (selected/disabled/active...), pero react-native-css solo evalúa variantes
+// `data-[...]` contra `props.dataSet`. Sin este mapeo, clases como
+// `data-[selected=true]:border-transparent` o `data-[disabled=true]:opacity-40`
+// nunca aplican en native, y `states` se filtra como prop inválida al Pressable.
+const Trigger = React.forwardRef<any, any>(({ states, dataSet, ...props }, ref) => (
+  <Pressable
+    ref={ref}
+    {...props}
+    dataSet={{ ...dataSet, ...states }}
+  />
+));
+Trigger.displayName = 'TriggerWithStates';
+
 const UITabs = createTabs({
   Root,
   List: View,
-  Trigger: Pressable,
+  Trigger,
   Content: View,
   ContentWrapper: AnimatedView,
   TriggerText: Text,
