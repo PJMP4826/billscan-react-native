@@ -2,16 +2,23 @@ import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { useRecentActivity } from "@/src/features/reports/application/useRecentActivity";
+import { ImageViewerModal } from "@/src/shared/components/ImageViewerModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Image, Pressable, ScrollView, View } from "react-native";
-import { ImageViewerModal } from "@/src/shared/components/ImageViewerModal";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  View,
+  type ImageSourcePropType,
+} from "react-native";
 
 export function RecentActivityList() {
   const { recentActivity, isLoading, isError } = useRecentActivity();
 
-  // Estado para guardar la URL de la imagen que se va a mostrar en el modal
-  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null);
+  // Estado para guardar la imagen que se va a mostrar en el modal
+  const [selectedImage, setSelectedImage] =
+    useState<ImageSourcePropType | null>(null);
 
   return (
     <>
@@ -72,7 +79,7 @@ export function RecentActivityList() {
                   <View className="flex-1 flex-row items-center gap-3 overflow-hidden">
                     {/* ENVOLVEMOS LA IMAGEN EN UN PRESSABLE PARA ABRIR EL MODAL */}
                     <Pressable
-                      onPress={() => setSelectedImageUrl(item.fileUrl)}
+                      onPress={() => setSelectedImage({ uri: item.fileUrl })}
                       className="h-16 w-12 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-slate-100">
                       <Image
                         source={{ uri: item.fileUrl }}
@@ -125,8 +132,8 @@ export function RecentActivityList() {
       </Card>
 
       <ImageViewerModal
-        imageUrl={selectedImageUrl}
-        onClose={() => setSelectedImageUrl(null)}
+        source={selectedImage}
+        onClose={() => setSelectedImage(null)}
       />
     </>
   );

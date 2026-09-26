@@ -1,15 +1,15 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Modal, ModalBackdrop, ModalContent } from "@/components/ui/modal";
-import { Image, Pressable, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { Image, Pressable, View, type ImageSourcePropType } from "react-native";
 
 interface ImageViewerModalProps {
-  imageUrl: string | null;
+  source: ImageSourcePropType | null;
   onClose: () => void;
 }
 
-export function ImageViewerModal({ imageUrl, onClose }: ImageViewerModalProps) {
+export function ImageViewerModal({ source, onClose }: ImageViewerModalProps) {
   return (
-    <Modal isOpen={!!imageUrl} onClose={onClose} className="flex-1">
+    <Modal isOpen={!!source} onClose={onClose} className="flex-1">
       {/* Fondo semitransparente con clase tailwind */}
       <ModalBackdrop className="bg-black/75" />
 
@@ -22,11 +22,11 @@ export function ImageViewerModal({ imageUrl, onClose }: ImageViewerModalProps) {
         </Pressable>
 
         {/* Contenedor de la Imagen */}
-        {imageUrl ? (
+        {source ? (
           <View className="h-[85%] w-[92%] overflow-hidden rounded-3xl">
             <Image
-              source={{ uri: imageUrl }}
-              resizeMode="cover"
+              source={source}
+              resizeMode="contain"
               className="h-full w-full"
             />
           </View>
