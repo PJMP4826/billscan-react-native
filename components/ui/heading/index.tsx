@@ -1,4 +1,3 @@
-import React, { forwardRef, memo } from 'react';
 import {
   H1 as H1Base,
   H2 as H2Base,
@@ -6,22 +5,23 @@ import {
   H4 as H4Base,
   H5 as H5Base,
   H6 as H6Base,
-} from '@expo/html-elements';
-import { headingStyle } from './styles';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { styled } from 'nativewind';
+} from "@expo/html-elements";
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+import { styled } from "nativewind";
+import React, { forwardRef, memo } from "react";
+import { headingStyle } from "./styles";
 
 type IHeadingProps = VariantProps<typeof headingStyle> &
   React.ComponentPropsWithoutRef<typeof H1Base> & {
     as?: React.ElementType;
   };
 
-const H1 = styled(H1Base, { className: 'style' });
-const H2 = styled(H2Base, { className: 'style' });
-const H3 = styled(H3Base, { className: 'style' });
-const H4 = styled(H4Base, { className: 'style' });
-const H5 = styled(H5Base, { className: 'style' });
-const H6 = styled(H6Base, { className: 'style' });
+const H1 = styled(H1Base, { className: "style" });
+const H2 = styled(H2Base, { className: "style" });
+const H3 = styled(H3Base, { className: "style" });
+const H4 = styled(H4Base, { className: "style" });
+const H5 = styled(H5Base, { className: "style" });
+const H6 = styled(H6Base, { className: "style" });
 
 const MappedHeading = memo(
   forwardRef<React.ComponentRef<typeof H1>, IHeadingProps>(
@@ -38,12 +38,12 @@ const MappedHeading = memo(
         highlight,
         ...props
       },
-      ref
+      ref,
     ) {
       switch (size) {
-        case '5xl':
-        case '4xl':
-        case '3xl':
+        case "5xl":
+        case "4xl":
+        case "3xl":
           return (
             <H1
               className={headingStyle({
@@ -62,7 +62,7 @@ const MappedHeading = memo(
               ref={ref}
             />
           );
-        case '2xl':
+        case "2xl":
           return (
             <H2
               className={headingStyle({
@@ -81,7 +81,7 @@ const MappedHeading = memo(
               ref={ref}
             />
           );
-        case 'xl':
+        case "xl":
           return (
             <H3
               className={headingStyle({
@@ -100,7 +100,7 @@ const MappedHeading = memo(
               ref={ref}
             />
           );
-        case 'lg':
+        case "lg":
           return (
             <H4
               className={headingStyle({
@@ -119,7 +119,7 @@ const MappedHeading = memo(
               ref={ref}
             />
           );
-        case 'md':
+        case "md":
           return (
             <H5
               className={headingStyle({
@@ -138,8 +138,8 @@ const MappedHeading = memo(
               ref={ref}
             />
           );
-        case 'sm':
-        case 'xs':
+        case "sm":
+        case "xs":
           return (
             <H6
               className={headingStyle({
@@ -178,14 +178,14 @@ const MappedHeading = memo(
             />
           );
       }
-    }
-  )
+    },
+  ),
 );
 
 const Heading = memo(
   forwardRef<React.ComponentRef<typeof H1>, IHeadingProps>(function Heading(
-    { className, size = 'lg', as: AsComp, ...props },
-    ref
+    { className, size = "lg", as: AsComp, ...props },
+    ref,
   ) {
     const {
       isTruncated,
@@ -196,6 +196,14 @@ const Heading = memo(
       italic,
       highlight,
     } = props;
+
+    // En nativo el Heading se renderiza con @expo/html-elements (H1–H6), que
+    // inyecta `marginVertical: em(1.33)` como *style inline* — y el style gana
+    // sobre la clase `my-0`, dejando ~21px de hueco arriba/abajo en Android
+    // (escalado por la fuente del sistema). En web el `my-0` ya lo neutraliza.
+    // Forzamos aquí el margen en 0 para que nativo y web queden consistentes;
+    // al ser un array, el `style` que pase el consumidor tiene la última palabra.
+    const headingStyleProp = [{ marginTop: 0, marginBottom: 0 }, props.style];
 
     if (AsComp) {
       return (
@@ -212,16 +220,23 @@ const Heading = memo(
             class: className,
           })}
           {...props}
+          style={headingStyleProp}
         />
       );
     }
 
     return (
-      <MappedHeading className={className} size={size} ref={ref} {...props} />
+      <MappedHeading
+        className={className}
+        size={size}
+        ref={ref}
+        {...props}
+        style={headingStyleProp}
+      />
     );
-  })
+  }),
 );
 
-Heading.displayName = 'Heading';
+Heading.displayName = "Heading";
 
 export { Heading };
