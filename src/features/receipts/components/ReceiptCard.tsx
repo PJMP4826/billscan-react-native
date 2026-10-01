@@ -7,6 +7,7 @@ import type { ReceiptListItemViewModel } from "@/src/features/receipts/applicati
 import { ReceiptStatus } from "@/src/features/receipts/domain/enums/receipt-status.enum";
 import { ImageViewerModal } from "@/src/shared/components/ImageViewerModal";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, View, type ImageSourcePropType } from "react-native";
 
@@ -64,6 +65,7 @@ interface ReceiptCardProps {
 
 export function ReceiptCard({ receipt }: ReceiptCardProps) {
   const statusStyle = RECEIPT_STATUS_STYLES[receipt.status];
+  const router = useRouter();
 
   // Estado para guardar la imagen que se va a mostrar en el modal
   const [selectedImage, setSelectedImage] =
@@ -150,7 +152,14 @@ export function ReceiptCard({ receipt }: ReceiptCardProps) {
               </Text>
             </View>
 
-            <Pressable className="shrink-0 flex-row items-center gap-1 rounded-lg bg-[#1E40AF] px-3 py-2.5">
+            <Pressable
+              onPress={() =>
+                router.push({
+                  pathname: "/(tabs)/receipts/[id]",
+                  params: { id: receipt.receiptUuid },
+                })
+              }
+              className="shrink-0 flex-row items-center gap-1 rounded-lg bg-[#1E40AF] px-3 py-2.5">
               <Text className="text-xs font-semibold text-white">
                 Ver Detalle
               </Text>
