@@ -136,6 +136,7 @@ const BadgeText = React.forwardRef<
   return (
     <RNText
       ref={ref}
+      allowFontScaling={false}
       className={badgeTextStyle({
         action,
         size,

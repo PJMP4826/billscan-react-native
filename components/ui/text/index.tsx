@@ -1,7 +1,7 @@
-import React from 'react';
-import { Text as RNText, Platform } from 'react-native';
-import type { VariantProps } from '@gluestack-ui/utils/nativewind-utils';
-import { textStyle } from './styles';
+import type { VariantProps } from "@gluestack-ui/utils/nativewind-utils";
+import React from "react";
+import { Platform, Text as RNText } from "react-native";
+import { textStyle } from "./styles";
 
 type ITextProps = React.ComponentProps<typeof RNText> &
   VariantProps<typeof textStyle>;
@@ -14,7 +14,7 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
       bold,
       underline,
       strikeThrough,
-      size = 'md',
+      size = "md",
       sub,
       italic,
       highlight,
@@ -22,7 +22,7 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
       children, // <-- Extraemos los children del resto de las props
       ...props
     },
-    ref
+    ref,
   ) {
     return (
       <RNText
@@ -38,18 +38,23 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
           class: className,
         })}
         // includeFontPadding: false sigue siendo útil para el centrado vertical en Android
-        style={[Platform.OS === 'android' && { includeFontPadding: false }, style]}
+        style={[
+          Platform.OS === "android" && { includeFontPadding: false },
+          style,
+        ]}
+        // Sin esto, RN multiplica el fontSize por el font-scale del sistema en
+        // Android/iOS, mientras que en web el tamaño del CSS es fijo. Resultado:
+        // el mismo JSX se veía más grande (y más alto) solo en Android.
+        // Se coloca ANTES de {...props} para permitir override explícito.
+        allowFontScaling={false}
         {...props}
-        ref={ref}
-      >
+        ref={ref}>
         {children}
-        {/* Inyección global del parche para el recorte en Android */}
-        {Platform.OS === 'android' ? ' ' : null}
       </RNText>
     );
-  }
+  },
 );
 
-Text.displayName = 'Text';
+Text.displayName = "Text";
 
 export { Text };

@@ -219,6 +219,7 @@ const Heading = memo(
             highlight: highlight as boolean,
             class: className,
           })}
+          allowFontScaling={false}
           {...props}
           style={headingStyleProp}
         />
@@ -230,6 +231,7 @@ const Heading = memo(
         className={className}
         size={size}
         ref={ref}
+        allowFontScaling={false}
         {...props}
         style={headingStyleProp}
       />
