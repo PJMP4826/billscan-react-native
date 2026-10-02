@@ -1,6 +1,6 @@
 import { Badge, BadgeText } from "@/components/ui/badge";
-import { Heading } from "@/components/ui/heading";
 import { HStack } from "@/components/ui/hstack";
+import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Ionicons } from "@expo/vector-icons";
@@ -41,11 +41,10 @@ export function ReceiptHero({
       {/* Nombre del comercio (con check de verificado, si viene) */}
       <HStack className="flex-row items-center justify-center gap-1.5 px-4">
         <Heading
-          className="text-center text-xl font-bold text-slate-900"
+          className="text-xl font-bold text-slate-900"
           isTruncated>
-          {merchantName}
+          {merchantName} {"  "}
         </Heading>
-        <Ionicons name="checkmark-circle" size={18} color="#2563EB" />
       </HStack>
 
       {/* Total */}
