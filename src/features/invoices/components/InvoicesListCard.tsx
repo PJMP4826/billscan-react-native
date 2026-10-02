@@ -1,5 +1,5 @@
 import { Button, ButtonText } from "@/components/ui/button";
-import { Input, InputField, InputIcon, InputSlot } from "@/components/ui/input";
+import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useInvoiceList } from "@/src/features/invoices/application/useInvoiceList";
 import { InvoiceCard } from "@/src/features/invoices/components/InvoiceCard";
@@ -7,39 +7,7 @@ import { formatCurrency } from "@/src/utils/currency-formatter";
 import { Ionicons } from "@expo/vector-icons";
 import { useMemo, useState } from "react";
 import { ScrollView, View } from "react-native";
-
-interface SummaryCardProps {
-  label: string;
-  value: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  iconColor: string;
-  iconBg: string;
-}
-
-function SummaryCard({
-  label,
-  value,
-  icon,
-  iconColor,
-  iconBg,
-}: SummaryCardProps) {
-  return (
-    <View className="min-w-0 flex-1 rounded-3xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-300/40">
-      <View
-        className="mb-3 h-10 w-10 items-center justify-center rounded-xl"
-        style={{ backgroundColor: iconBg }}>
-        <Ionicons name={icon} size={20} color={iconColor} />
-      </View>
-      <Text className="text-xs font-medium tracking-wide text-slate-400">
-        {label}
-      </Text>
-      <Text
-        className="mt-1 text-2xl font-bold text-slate-950">
-        {value}
-      </Text>
-    </View>
-  );
-}
+import { InvoiceSummaryCard } from "./InvoiceSummaryCard";
 
 export function InvoicesListCard() {
   const { invoices, total, isLoading, isError, refetch } = useInvoiceList({
@@ -81,14 +49,14 @@ export function InvoicesListCard() {
     <View className="flex-1 w-full">
       {/* Resumen superior */}
       <View className="w-full flex-row gap-3 mb-4">
-        <SummaryCard
+        <InvoiceSummaryCard
           label="TOTAL FACTURADO"
           value={formatCurrency(totalBilled)}
           icon="document-text-outline"
           iconColor="#2563EB"
           iconBg="#EFF6FF"
         />
-        <SummaryCard
+        <InvoiceSummaryCard
           label="CFDIS LISTOS"
           value={String(total)}
           icon="copy-outline"
@@ -100,7 +68,7 @@ export function InvoicesListCard() {
       {/* Buscador */}
       <Input className="mb-4 h-11 rounded-lg border-slate-200 bg-white">
         <InputSlot className="pl-3">
-          <InputIcon as={Ionicons} name="search" size={18} color="#94a3b8" />
+          <Ionicons name="search" size={18} color="#94a3b8" />
         </InputSlot>
         <InputField
           value={search}
