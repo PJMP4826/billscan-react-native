@@ -1,6 +1,12 @@
-import { View, Text } from "react-native";
+import { InvoicesListCard } from "@/src/features/invoices/components/InvoicesListCard";
+import { ScreenContainer } from "@/src/shared/components/ScreenContainer";
+
 export default function InvoicesScreen() {
-  return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>CFDI y Reportes</Text>
-  </View>;
+  return (
+    <ScreenContainer
+      title="Repositorio de CFDI y Reportes"
+      showBackButton={false}>
+      <InvoicesListCard />
+    </ScreenContainer>
+  );
 }
