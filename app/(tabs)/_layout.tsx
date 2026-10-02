@@ -5,7 +5,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Pressable, View } from "react-native";
+import { ColorValue, Pressable, View } from "react-native";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import Colors from "@/constants/Colors";
@@ -18,7 +18,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
 type MaterialIconName = React.ComponentProps<typeof MaterialIcons>["name"];
 
-function IonIcon(props: { name: IoniconName; color: string }) {
+function IonIcon(props: { name: IoniconName; color: ColorValue }) {
   return <Ionicons size={24} style={{ marginBottom: -3 }} {...props} />;
 }
 
@@ -33,10 +33,11 @@ export default function TabLayout() {
     <>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarActiveTintColor:
+            Colors[colorScheme === "dark" ? "dark" : "light"].tint,
           headerShown: true,
           header: () => <AppHeader />,
-          
+
           tabBarStyle: {
             height: 80 + insets.bottom,
             paddingTop: 8,
