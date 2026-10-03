@@ -49,7 +49,7 @@ const Text = React.forwardRef<React.ComponentRef<typeof RNText>, ITextProps>(
         allowFontScaling={false}
         {...props}
         ref={ref}>
-        {children}
+        {children} {"  "}
       </RNText>
     );
   },
