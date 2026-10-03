@@ -60,10 +60,14 @@ export function InvoiceHero({ hero }: InvoiceHeroProps) {
 
       {/* Badge del tipo de comprobante (solo si la API lo reporta) */}
       {hero.tipoComprobanteLabel ? (
-        <Badge action="info" variant="outline" size="md" className="mt-1">
+        <Badge
+          action="info"
+          variant="outline"
+          size="md"
+          className="mt-1 self-center">
           <Ionicons name="shield-checkmark-outline" size={14} color="#1D4ED8" />
           <BadgeText action="info">
-            {`TIPO: ${hero.tipoComprobanteLabel}`}
+            {`TIPO: ${hero.tipoComprobanteLabel}`}{" "}
           </BadgeText>
         </Badge>
       ) : null}

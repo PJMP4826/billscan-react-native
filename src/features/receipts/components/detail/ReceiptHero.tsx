@@ -1,6 +1,6 @@
 import { Badge, BadgeText } from "@/components/ui/badge";
-import { HStack } from "@/components/ui/hstack";
 import { Heading } from "@/components/ui/heading";
+import { HStack } from "@/components/ui/hstack";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { Ionicons } from "@expo/vector-icons";
@@ -40,9 +40,7 @@ export function ReceiptHero({
 
       {/* Nombre del comercio (con check de verificado, si viene) */}
       <HStack className="flex-row items-center justify-center gap-1.5 px-4">
-        <Heading
-          className="text-xl font-bold text-slate-900"
-          isTruncated>
+        <Heading className="text-xl font-bold text-slate-900" isTruncated>
           {merchantName} {"  "}
         </Heading>
       </HStack>
@@ -75,14 +73,14 @@ export function ReceiptHero({
           action={isBillable ? "success" : "muted"}
           variant="outline"
           size="md"
-          className="mt-1">
+          className="mt-1 self-center">
           <Ionicons
             name={isBillable ? "checkmark-circle" : "close-circle-outline"}
             size={14}
             color={isBillable ? "#16A34A" : "#64748B"}
           />
           <BadgeText action={isBillable ? "success" : "muted"}>
-            {isBillable ? "FACTURABLE (SAT CFDI 4.0)" : "NO FACTURABLE"}
+            {isBillable ? "FACTURABLE (SAT CFDI 4.0)" : "NO FACTURABLE"} {"   "}
           </BadgeText>
           {isBillable ? (
             <Ionicons name="chevron-forward" size={14} color="#15803D" />
