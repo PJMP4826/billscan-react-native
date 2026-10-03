@@ -67,7 +67,7 @@ export function InvoiceHero({ hero }: InvoiceHeroProps) {
           className="mt-1 self-center">
           <Ionicons name="shield-checkmark-outline" size={14} color="#1D4ED8" />
           <BadgeText action="info">
-            {`TIPO: ${hero.tipoComprobanteLabel}`}{" "}
+            {`TIPO: ${hero.tipoComprobanteLabel}`}{"  "}
           </BadgeText>
         </Badge>
       ) : null}
