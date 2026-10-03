@@ -182,7 +182,7 @@ export function InvoiceConceptDetailSheet({
                       <HStack className="w-full flex-row items-center gap-2">
                         <Badge action="info" variant="solid" size="sm">
                           <BadgeText action="info" size="sm">
-                            Traslado
+                            Traslado {" "}
                           </BadgeText>
                         </Badge>
                       </HStack>
