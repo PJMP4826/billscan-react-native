@@ -4,10 +4,12 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import type { InvoiceListItemViewModel } from "@/src/features/invoices/application/useInvoiceList";
 import { Ionicons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
 import { Pressable, View } from "react-native";
 
 interface InvoiceCardProps {
   invoice: InvoiceListItemViewModel;
+  /** Sobrescribe la navegación por defecto al detalle del CFDI. */
   onPressDetail?: () => void;
 }
 
@@ -18,6 +20,23 @@ interface InvoiceCardProps {
  *   - Pie: uso del CFDI + acción "Ver Detalle"
  */
 export function InvoiceCard({ invoice, onPressDetail }: InvoiceCardProps) {
+  const router = useRouter();
+
+  const handlePressDetail = () => {
+    // `onPressDetail` permite que el contenedor sustituya la navegación.
+    if (onPressDetail) {
+      onPressDetail();
+      return;
+    }
+
+    // El `id` de la ruta es el `receipt_uuid` (NO el uuid del timbre fiscal);
+    // `receiptUuid` ya viene mapeado desde `receipt_uuid` en la API.
+    router.push({
+      pathname: "/(tabs)/invoices/[id]",
+      params: { id: invoice.receiptUuid },
+    });
+  };
+
   return (
     <Card className="rounded-3xl border border-slate-200 bg-white p-4 shadow-sm shadow-slate-300/40 sm:p-5">
       <VStack className="gap-3 sm:gap-4">
@@ -67,7 +86,9 @@ export function InvoiceCard({ invoice, onPressDetail }: InvoiceCardProps) {
           </View>
 
           <Pressable
-            onPress={onPressDetail}
+            onPress={handlePressDetail}
+            accessibilityRole="button"
+            accessibilityLabel="Ver detalle del CFDI"
             className="shrink-0 flex-row items-center gap-1 rounded-lg bg-emerald-600 px-3 py-2.5 active:bg-emerald-700">
             <Text className="text-xs font-semibold text-white">
               Ver Detalle

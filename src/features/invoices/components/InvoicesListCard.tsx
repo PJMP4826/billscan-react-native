@@ -123,7 +123,7 @@ export function InvoicesListCard() {
         {!isLoading && !isError && filteredInvoices.length > 0 && (
           <View className="gap-4">
             {filteredInvoices.map((invoice) => (
-              <InvoiceCard key={invoice.invoiceUuid} invoice={invoice} />
+              <InvoiceCard key={invoice.receiptUuid} invoice={invoice} />
             ))}
           </View>
         )}

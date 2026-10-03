@@ -31,7 +31,7 @@ export interface InvoicesListResponse {
  * Se aplanan los `null`/`undefined` a "" para no romper la UI.
  */
 export const mapInvoiceApiItemToDto = (item: InvoiceApiItem): InvoiceDto => ({
-  invoiceUuid: item.receipt_uuid,
+  receiptUuid: item.receipt_uuid,
   issuerName: item.emisor_nombre ?? "",
   total: item.total ?? "",
   serie: item.serie ?? "",

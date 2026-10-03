@@ -3,7 +3,7 @@ import { useInvoicesQuery } from "@/src/features/invoices/infrastructure/reposit
 import { formatCurrency } from "@/src/utils/currency-formatter";
 
 export interface InvoiceListItemViewModel {
-  invoiceUuid: string;
+  receiptUuid: string;
   issuerName: string;
   /** Etiqueta "SERIE-FOLIO" lista para UI (p. ej. "MOCK-00000123"). */
   cfdiLabel: string;
@@ -34,7 +34,7 @@ const normalizeUsage = (usage: string): string => usage.trim();
 const mapInvoiceToViewModel = (
   invoice: InvoiceDto,
 ): InvoiceListItemViewModel => ({
-  invoiceUuid: invoice.invoiceUuid,
+  receiptUuid: invoice.receiptUuid,
   issuerName: invoice.issuerName,
   cfdiLabel: buildCfdiLabel(invoice.serie, invoice.folio),
   totalLabel: formatCurrency(invoice.total),
