@@ -1,6 +1,6 @@
 import { Heading } from "@/components/ui/heading";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, type Href } from "expo-router";
 import React from "react";
 import { Pressable, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,12 +9,18 @@ interface ScreenContainerProps {
   title: string;
   children: React.ReactNode;
   showBackButton?: boolean;
+  /**
+   * Ruta a la que volver cuando `router.canGoBack()` es `false` (deep link
+   * sin historial). Por defecto apunta al listado de tickets.
+   */
+  backFallbackHref?: Href;
 }
 
 export function ScreenContainer({
   title,
   children,
   showBackButton = false,
+  backFallbackHref = "/(tabs)/receipts",
 }: ScreenContainerProps) {
   const router = useRouter();
 
@@ -44,7 +50,7 @@ export function ScreenContainer({
               if (router.canGoBack()) {
                 router.back();
               } else {
-                router.replace("/(tabs)/receipts");
+                router.replace(backFallbackHref);
               }
             }}
             hitSlop={12}
