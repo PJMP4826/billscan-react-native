@@ -5,7 +5,7 @@ import { formatCurrency } from "@/src/utils/currency-formatter";
 export interface InvoiceListItemViewModel {
   invoiceUuid: string;
   issuerName: string;
-  /** Etiqueta "SERIE-FOLIO" lista para UI (p. ej. "FCP-23586096"). */
+  /** Etiqueta "SERIE-FOLIO" lista para UI (p. ej. "MOCK-00000123"). */
   cfdiLabel: string;
   totalLabel: string;
   /** Uso del CFDI normalizado a "G03 - Gastos en general". */

@@ -7,7 +7,7 @@ export interface InvoiceDto {
   total: string;
   /** Serie del CFDI (por ejemplo "FCP"). Puede venir vacía. */
   serie: string;
-  /** Folio del CFDI (por ejemplo "23586096"). Puede venir vacío. */
+  /** Folio del CFDI (por ejemplo "00000123"). Puede venir vacío. */
   folio: string;
   /** Clave y descripción del uso del CFDI (por ejemplo "G03 - Gastos en general"). */
   usage: string;
