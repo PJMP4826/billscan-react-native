@@ -2,12 +2,12 @@ import type { InvoiceApiItem } from "@/src/features/invoices/infrastructure/sche
 
 export const invoicesListMockItems: InvoiceApiItem[] = [
   {
-    receipt_uuid: "37348a21bab649429916946b26a4d789",
-    emisor_nombre: "GOOGLE CLOUD MEXICO",
-    total: "138.36",
-    serie: "FCP",
-    folio: "23586096",
-    uso_cfdi: "S01 - Sin efectos fiscales",
+    receipt_uuid: "9f4c2e7a1b8d4c3e8f5a6b7c0d1e2f30",
+    emisor_nombre: "TECNOLOGIAS ANDES DEL NORTE",
+    total: "1160.00",
+    serie: "MOCK",
+    folio: "00000123",
+    uso_cfdi: "G03 - Gastos en general",
   },
   {
     receipt_uuid: "7de9215692654d98a94ee5264a479b50",
