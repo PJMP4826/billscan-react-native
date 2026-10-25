@@ -1,4 +1,3 @@
-import { mapMonthlyInvoicingApiItemToDto } from "@/src/features/reports/infrastructure/schemas/monthly-invoicing.schema";
 import { useMonthlyInvoicingQuery } from "@/src/features/reports/infrastructure/repositories/monthly-invoicing.repository";
 
 const formatCurrency = (value: string) => {
@@ -22,7 +21,7 @@ export const useMonthlyInvoicing = (period: string = "month") => {
   return {
     monthlyInvoicing: query.data
       ? (() => {
-          const dto = mapMonthlyInvoicingApiItemToDto(query.data);
+          const dto = query.data;
 
           return {
             ...dto,
