@@ -1,15 +1,11 @@
 import { queryKeys } from "@/src/features/reports/infrastructure/constants/queryKeys";
-import { receiptsCount } from "@/src/features/reports/infrastructure/services/api/reports-api";
+import { createReceiptsCountReadModel } from "@/src/features/reports/infrastructure/factories/receipts-count-read-model.factory";
 import { useQuery } from "@tanstack/react-query";
 
 export const useReceiptsCountQuery = () =>
   useQuery({
     queryKey: queryKeys.receiptsCount.detail(),
-    queryFn: async () => {
-      const response = await receiptsCount.get();
-
-      return response.data;
-    },
+    queryFn: () => createReceiptsCountReadModel().getReceiptsCount(),
     staleTime: 1000 * 60 * 5,
     retry: false,
   });
