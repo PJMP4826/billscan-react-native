@@ -80,7 +80,8 @@ export const receiptDetailMockItems: Record<string, ReceiptDetailApiItem> = {
     context_notes:
       "Tienes 7 días naturales a partir de la emisión para solicitar tu factura electrónica. Tu opinión nos ayuda a mejorar.",
     extra_metadata: null,
-    file_url: "",
+    file_url:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbKLWD5Yw6GhrddGY2B9JPncqkPm7qAqJviAHj028PsPTilwTsGJV6sjNx&s=10",
   },
 };
 
