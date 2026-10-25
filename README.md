@@ -27,7 +27,7 @@
 </p>
 
 <p align="center">
-  <img src=".github/assets/screenshots/BillsScan%20Multi-Device%20Expense%20Dashboard.png" width="80%" alt="BillScan en iPhone, iPad y MacBook: dashboard, detalle de ticket y lista de gastos" />
+  <img src=".github/assets/screenshots/BillsScan%20Multi-Device%20Expense%20Dashboard.png" width="100%" alt="BillScan en iPhone, iPad y MacBook: dashboard, detalle de ticket y lista de gastos" />
 </p>
 
 BillScan convierte los tickets del día a día en un historial ordenado y listo para facturar. Captura una o varias imágenes, guárdalas como ticket o solicita su facturación, y consulta después el CFDI con sus datos fiscales, conceptos, impuestos y certificación del SAT.
