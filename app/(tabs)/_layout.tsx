@@ -1,6 +1,6 @@
 import { AppHeader } from "@/components/AppHeader";
 import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
-import { useFiscalInfoSetup } from "@/src/features/fiscal-info/infrastructure/hooks/useFiscalInfoSetup";
+import { useFiscalInfoSetup } from "@/src/features/fiscal-info/application/useFiscalInfoSetup";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";

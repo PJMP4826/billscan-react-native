@@ -9,6 +9,9 @@ export const useFiscalInfoSetup = () => {
   const mutation = useCreateFiscalInfo();
 
   const needsSetup = !query.isLoading && query.data === null;
+  console.log(query.data);
+  
+  console.log(needsSetup);
 
   const submit = (payload: FiscalInfoPayload) => {
     mutation.mutate(payload);
