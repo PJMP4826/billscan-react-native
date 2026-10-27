@@ -1,7 +1,11 @@
+import type { FiscalInfoDto } from "@/src/features/fiscal-info/application/dtos/fiscal-info.dto";
+import type { RegimenFiscalDto } from "@/src/features/fiscal-info/application/dtos/regimen-fiscal.dto";
+import type { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
+import type { TaxRegime } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
+import { InvoiceUse as InvoiceUseValue } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 import { z } from "zod";
-import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 
-export const InvoiceUseEnum = z.enum(InvoiceUse);
+export const InvoiceUseEnum = z.enum(InvoiceUseValue);
 
 // Lo que el usuario llena en el form se envia al backend
 export const fiscalInfoSchema = z.object({
@@ -18,24 +22,6 @@ export const fiscalInfoSchema = z.object({
   use_cfdi_code_default: InvoiceUseEnum,
 });
 
-// El objeto anidado que regresa el backend para el régimen
-const regimenSchema = z.object({
-  code: z.string(),
-  description: z.string(),
-  fecha_alta: z.string(),
-});
-
-// Lo que el backend realmente regresa — diferente al input
-export const fiscalInfoResponseSchema = z.object({
-  rfc: z.string(),
-  razon_social: z.string(),
-  email: z.string(),
-  cp: z.string(),
-  address: z.string().nullable(),
-  use_cfdi_default: InvoiceUseEnum,
-  regimen_actual: regimenSchema.nullable(),
-});
-
 // POST response
 export const fiscalInfoCreatedResponseSchema = z.object({
   status: z.literal(201),
@@ -43,8 +29,61 @@ export const fiscalInfoCreatedResponseSchema = z.object({
 });
 
 export type FiscalInfoPayload = z.infer<typeof fiscalInfoSchema>;
-export type FiscalInfoResponse = z.infer<typeof fiscalInfoResponseSchema>;
 export type FiscalInfoCreatedResponse = z.infer<
   typeof fiscalInfoCreatedResponseSchema
 >;
-export type Regimen = z.infer<typeof regimenSchema>;
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * Contrato crudo de la API (snake_case) para GET /fiscal-info
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+export interface FiscalInfoRegimenApi {
+  code?: string | null;
+  description?: string | null;
+  fecha_alta?: string | null;
+}
+
+export interface FiscalInfoApiItem {
+  rfc?: string | null;
+  razon_social?: string | null;
+  email?: string | null;
+  cp?: string | null;
+  address?: string | null;
+  use_cfdi_default?: string | null;
+  /** El backend regresa el régimen vigente; la UI lo consume como colección. */
+  regimenes: FiscalInfoRegimenApi[];
+}
+
+export interface FiscalInfoResponse {
+  status: number;
+  /** La API devuelve los datos fiscales directamente en `data` (sin envoltorio). */
+  data: FiscalInfoApiItem;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * Mapeo API (snake_case, todo nullable) → DTO de dominio (snake_case)
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+const mapRegimen = (
+  regimen: FiscalInfoRegimenApi | null | undefined,
+): RegimenFiscalDto => ({
+  code: (regimen?.code ?? "R601") as TaxRegime,
+  description: regimen?.description?.trim() || "Régimen sin descripción",
+  fecha_alta: regimen?.fecha_alta ?? "",
+});
+
+export const mapFiscalInfoApiItemToDto = (
+  item: FiscalInfoApiItem,
+): FiscalInfoDto => ({
+  rfc: item.rfc ?? "",
+  razon_social: item.razon_social?.trim() || "",
+  email: item.email ?? "",
+  cp: item.cp ?? "",
+  address: item.address ?? "",
+  use_cfdi_default: (item.use_cfdi_default ?? "G03") as InvoiceUse,
+  regimenes: item.regimenes.map((r) => mapRegimen(r)),
+});
+
+export const mapFiscalInfoResponseToDto = (
+  response: FiscalInfoResponse,
+): FiscalInfoDto => mapFiscalInfoApiItemToDto(response.data);
