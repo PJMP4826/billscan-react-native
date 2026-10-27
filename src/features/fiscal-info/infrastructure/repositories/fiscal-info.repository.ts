@@ -1,20 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fiscalInfoApi } from "@/src/features/fiscal-info/infrastructure/services/api/fiscal-info-api";
 import { queryKeys } from "@/src/features/fiscal-info/infrastructure/constants/queryKeys";
+import { createFiscalInfoReadModel } from "@/src/features/fiscal-info/infrastructure/factories/fiscal-info-read-model.factory";
 
 export const useFiscalInfoQuery = () =>
   useQuery({
     queryKey: queryKeys.fiscalInfo.detail(),
-    queryFn: async () => {
-      try {
-        return await fiscalInfoApi.get();
-      } catch (error: any) {
-        // 404 = no fiscal info yet, not a real error
-        // return null so the app can react to it without throwing
-        if (error?.status === 404) return null;
-        throw error; // re-throw everything else (500, network, etc.)
-      }
-    },
+    queryFn: () => createFiscalInfoReadModel().getFiscalInfo(),
     staleTime: 1000 * 60 * 60 * 24, // 24h — fiscal data rarely changes
     retry: false, // don't retry on 404
   });
