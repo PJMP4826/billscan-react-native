@@ -1,11 +1,18 @@
 import type { FiscalInfoDto } from "@/src/features/fiscal-info/application/dtos/fiscal-info.dto";
 import type { RegimenFiscalDto } from "@/src/features/fiscal-info/application/dtos/regimen-fiscal.dto";
 import type { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
-import type { TaxRegime } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
 import { InvoiceUse as InvoiceUseValue } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
+import { TaxRegime } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
 import { z } from "zod";
 
 export const InvoiceUseEnum = z.enum(InvoiceUseValue);
+
+// Un régimen fiscal dentro del formulario. El backend espera `fecha_alta_sat`
+// como datetime, por eso el payload se serializa con `toSatDateTime`.
+export const regimenFiscalPayloadSchema = z.object({
+  code: z.string().min(1, "Régimen fiscal requerido"),
+  fecha_alta_sat: z.string().min(1, "Fecha de alta en el SAT requerida"),
+});
 
 // Lo que el usuario llena en el form se envia al backend
 export const fiscalInfoSchema = z.object({
@@ -18,7 +25,9 @@ export const fiscalInfoSchema = z.object({
   email: z.email("Email inválido"),
   cp: z.string().length(5, "El CP debe tener exactamente 5 dígitos"),
   address: z.string().optional(),
-  regimen_code: z.string().min(1, "Régimen fiscal requerido"),
+  regimenes: z
+    .array(regimenFiscalPayloadSchema)
+    .min(1, "Selecciona al menos un régimen fiscal"),
   use_cfdi_code_default: InvoiceUseEnum,
 });
 
@@ -67,7 +76,7 @@ export interface FiscalInfoResponse {
 const mapRegimen = (
   regimen: FiscalInfoRegimenApi | null | undefined,
 ): RegimenFiscalDto => ({
-  code: (regimen?.code ?? "R601") as TaxRegime,
+  code: (regimen?.code ?? TaxRegime.R601) as TaxRegime,
   description: regimen?.description?.trim() || "Régimen sin descripción",
   fecha_alta: regimen?.fecha_alta ?? "",
 });

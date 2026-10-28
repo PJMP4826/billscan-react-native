@@ -1,7 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fiscalInfoApi } from "@/src/features/fiscal-info/infrastructure/services/api/fiscal-info-api";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import { queryKeys } from "@/src/features/fiscal-info/infrastructure/constants/queryKeys";
 import { createFiscalInfoReadModel } from "@/src/features/fiscal-info/infrastructure/factories/fiscal-info-read-model.factory";
+import { fiscalInfoApi } from "@/src/features/fiscal-info/infrastructure/services/api/fiscal-info-api";
 
 export const useFiscalInfoQuery = () =>
   useQuery({
@@ -11,14 +12,21 @@ export const useFiscalInfoQuery = () =>
     retry: false, // don't retry on 404
   });
 
-export const useCreateFiscalInfo = () => {
+interface UseCreateFiscalInfoOptions {
+  onSuccess?: () => void;
+}
+
+export const useCreateFiscalInfo = (options?: UseCreateFiscalInfoOptions) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: fiscalInfoApi.create,
-    onSuccess: (data) => {
-      // seed cache immediately — no refetch needed
-      queryClient.setQueryData(queryKeys.fiscalInfo.detail(), data);
+    onSuccess: async () => {
+      // El POST sólo regresa {status, message}: hay que refrescar el detalle.
+      await queryClient.invalidateQueries({
+        queryKey: queryKeys.fiscalInfo.all,
+      });
+      options?.onSuccess?.();
     },
   });
 };
