@@ -71,11 +71,13 @@ Es una app construida con Expo para **Android, iOS y web**, pensada como proyect
     <td align="center"><p align="center"><strong>Actividad reciente</strong></p></td>
     <td align="center"><p align="center"><strong>Detalle de ticket</strong></p></td>
     <td align="center"><p align="center"><strong>Visor de ticket</strong></p></td>
+    <td align="center"><p align="center"><strong>Perfil Fiscal</strong></p></td>
   </tr>
   <tr>
     <td align="center"><img src=".github/assets/screenshots/pages/inicio-screenshot-2.webp" width="220" alt="Actividad reciente del dashboard con comercios, fechas, montos y estado de facturación" /></td>
     <td align="center"><img src=".github/assets/screenshots/pages/receipt-detail.webp" width="220" alt="Detalle de ticket con productos escaneados, subtotal, impuestos y método de pago" /></td>
     <td align="center"><img src=".github/assets/screenshots/pages/receipt-list-image-viewer.webp" width="220" alt="Visor de la imagen original del ticket dentro de la lista de gastos" /></td>
+    <td align="center"><img src=".github/assets/screenshots/pages/fiscal-profile.webp" width="220" alt="Perfil fiscal con RFC, razón social, correo fiscal, código postal, dirección, regímenes fiscales y botón Actualizar" /></td>
   </tr>
 </table>
 
