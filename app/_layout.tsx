@@ -6,6 +6,7 @@ import {
 } from "expo-router/react-navigation";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "react-native-reanimated";
@@ -66,6 +67,13 @@ function RootLayoutNav() {
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
             <CaptureProvider>
+              <Head>
+                <title>BillScan</title>
+                <meta
+                  name="description"
+                  content="Escanea y gestiona tus facturas de forma rápida."
+                />
+              </Head>
               <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen

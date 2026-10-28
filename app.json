@@ -28,32 +28,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/billscan-logo.png",
-      "config": {
-        "pwa": {
-          "name": "BillScan",
-          "shortName": "BillScan",
-          "description": "Escanea y gestiona tus facturas de forma rápida.",
-          "lang": "es-MX",
-          "startUrl": "/",
-          "display": "standalone",
-          "orientation": "portrait",
-          "backgroundColor": "#0c356a",
-          "themeColor": "#0c356a",
-          "icons": [
-            {
-              "src": "./assets/images/billscan-logo.png",
-              "sizes": "192x192",
-              "type": "image/png"
-            },
-            {
-              "src": "./assets/images/billscan-logo.png",
-              "sizes": "512x512",
-              "type": "image/png"
-            }
-          ]
-        }
-      }
+      "favicon": "./assets/images/billscan-logo.png"
     },
     "plugins": [
       "expo-router",
