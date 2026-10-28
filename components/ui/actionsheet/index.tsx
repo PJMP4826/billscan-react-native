@@ -14,6 +14,7 @@ import { styled } from 'nativewind';
 import React from 'react';
 import {
   FlatList,
+  type FlatListProps,
   Pressable,
   PressableProps,
   ScrollView,
@@ -188,8 +189,17 @@ type IActionsheetVirtualizedListProps = VariantProps<
 > &
   React.ComponentPropsWithoutRef<typeof UIActionsheet.VirtualizedList>;
 
-type IActionsheetFlatListProps = VariantProps<typeof actionsheetFlatListStyle> &
-  React.ComponentPropsWithoutRef<typeof UIActionsheet.FlatList>;
+// `UIActionsheet.FlatList` loses the item generic (createActionsheet infers it
+// as `unknown`), so the props are derived from the React Native type instead.
+type IActionsheetFlatListProps<ItemT = any> = VariantProps<
+  typeof actionsheetFlatListStyle
+> &
+  FlatListProps<ItemT>;
+
+type IActionsheetFlatListComponent = <ItemT>(
+  props: IActionsheetFlatListProps<ItemT> &
+    React.RefAttributes<React.ComponentRef<typeof UIActionsheet.FlatList>>
+) => React.ReactElement | null;
 
 type IActionsheetSectionListProps = VariantProps<
   typeof actionsheetSectionListStyle
@@ -377,7 +387,7 @@ const ActionsheetFlatList = React.forwardRef<
       {...props}
     />
   );
-});
+}) as IActionsheetFlatListComponent;
 
 const ActionsheetSectionList = React.forwardRef<
   React.ComponentRef<typeof UIActionsheet.SectionList>,
