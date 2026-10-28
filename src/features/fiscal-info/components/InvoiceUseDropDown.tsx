@@ -65,7 +65,6 @@ export default function InvoiceUseDropDown({
 
   const handleSelectOption = (newValue: string) => {
     setTempPreference(newValue);
-    console.log("Uso CFDI seleccionado: ", newValue);
     if (onValueChange) {
       onValueChange(newValue);
     }

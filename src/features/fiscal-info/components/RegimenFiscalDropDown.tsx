@@ -1,91 +1,83 @@
-import React from "react"; // ◄ Añadido para los useState
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Pressable } from "react-native";
+
 import {
   Actionsheet,
+  ActionsheetBackdrop,
   ActionsheetContent,
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
-  ActionsheetBackdrop,
-  ActionsheetSectionList,
-  ActionsheetSectionHeaderText,
+  ActionsheetFlatList,
 } from "@/components/ui/actionsheet";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import {
-  Radio,
-  RadioGroup,
-  RadioLabel,
-  RadioIndicator,
-  RadioIcon,
-} from "@/components/ui/radio";
-import { CircleIcon } from "@/components/ui/icon";
-import {
   TaxRegime,
   getTaxRegimeDescription,
 } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
 
-interface RegimenFiscalDropDownProps {
-  selectedValue?: string;
-  onValueChange?: (value: string) => void;
+interface RegimenFiscalOption {
+  value: string;
+  label: string;
 }
 
-export default function RegimenFiscalDropDown({
-  selectedValue,
-  onValueChange,
-}: RegimenFiscalDropDownProps) {
-  const taxRegimeOptions = Object.values(TaxRegime).map((value) => ({
-    value: value,
+interface RegimenFiscalDropDownProps {
+  selectedValues: string[];
+  onValuesChange: (values: string[]) => void;
+  isInvalid?: boolean;
+}
+
+const taxRegimeOptions: RegimenFiscalOption[] = Object.values(TaxRegime).map(
+  (value) => ({
+    value,
     label: `${value} - ${getTaxRegimeDescription(value)}`,
-  }));
+  }),
+);
 
-  const taxRegimeSections = [
-    {
-      title: "Todos los Regímenes",
-      data: Object.values(TaxRegime).map((val) => ({
-        value: val,
-        label: `${val} - ${getTaxRegimeDescription(val)}`,
-      })),
-    },
-  ];
+const buildTriggerLabel = (selectedValues: string[]): string => {
+  if (selectedValues.length === 0) return "Selecciona el Régimen Fiscal";
+  if (selectedValues.length <= 2) return selectedValues.join(", ");
+  return `${selectedValues.slice(0, 2).join(", ")} (+${
+    selectedValues.length - 2
+  })`;
+};
 
+export default function RegimenFiscalDropDown({
+  selectedValues,
+  onValuesChange,
+  isInvalid,
+}: RegimenFiscalDropDownProps) {
   const [showActionsheet, setShowActionsheet] = React.useState(false);
 
-  // Estado temporal para cuando el usuario está navegando las opciones del Actionsheet
-  const [tempPreference, setTempPreference] = React.useState(
-    selectedValue || "",
-  );
-
-  // Buscar la etiqueta actual basándonos en lo que React Hook Form tiene guardado
-  const currentLabel =
-    taxRegimeOptions.find((o) => o.value === selectedValue)?.label ||
-    "Selecciona el Régimen Fiscal";
-
-  const handleOpen = () => {
-    setTempPreference(selectedValue || ""); // Sincroniza el temporal con el valor real del formulario
-    setShowActionsheet(true);
-  };
-
-  const handleSelectOption = (newValue: string) => {
-    setTempPreference(newValue);
-    // console.log(newValue);
-    if (onValueChange) {
-      onValueChange(newValue);
+  const toggleOption = (value: string) => {
+    if (selectedValues.includes(value)) {
+      onValuesChange(selectedValues.filter((item) => item !== value));
+      return;
     }
-    setShowActionsheet(false);
+    onValuesChange([...selectedValues, value]);
   };
 
   return (
     <>
       <VStack space="xs" className="w-full">
-        {/* Botón estilizado que actúa como un "Select Trigger" */}
         <Button
           variant="outline"
-          size="sm"
-          className="justify-between w-full h-12 px-3 border border-background-300 rounded-md"
-          onPress={handleOpen}>
-          <ButtonText className="font-normal text-sm text-typography-700">
-            {currentLabel}
+          onPress={() => setShowActionsheet(true)}
+          className={`h-auto w-full flex-row items-center justify-between rounded-2xl border bg-white px-4 py-3 ${
+            isInvalid ? "border-red-500" : "border-slate-300"
+          }`}>
+          <ButtonText
+            numberOfLines={1}
+            className={`flex-1 pr-2 text-left text-sm font-normal ${
+              selectedValues.length === 0
+                ? "text-slate-400"
+                : "text-slate-700"
+            }`}>
+            {buildTriggerLabel(selectedValues)}
           </ButtonText>
+          <Ionicons name="chevron-down" size={18} color="#64748B" />
         </Button>
       </VStack>
 
@@ -97,36 +89,45 @@ export default function RegimenFiscalDropDown({
           <ActionsheetDragIndicatorWrapper>
             <ActionsheetDragIndicator />
           </ActionsheetDragIndicatorWrapper>
-          <RadioGroup
-            value={selectedValue}
-            onChange={handleSelectOption}
-            className="w-full h-full">
-            <ActionsheetSectionList
-              sections={taxRegimeSections}
-              keyExtractor={(item: any) => item.value}
-              contentContainerStyle={{ paddingBottom: 40 }}
-              // Cómo se pinta el título de cada grupo
-              renderSectionHeader={({ section: { title } }: any) => (
-                <ActionsheetSectionHeaderText className="bg-background-0 pt-4 pb-2">
-                  <Text className="font-bold text-typography-900 text-sm">
-                    {title}
-                  </Text>
-                </ActionsheetSectionHeaderText>
-              )}
-              renderItem={({ item }: any) => (
-                <Radio
-                  value={item.value}
-                  className="flex-row justify-between w-full py-3 border-b border-background-100">
-                  <RadioLabel className="text-sm flex-1 pr-4">
+
+          <Text className="w-full pb-2 pt-2 text-sm font-bold text-slate-900">
+            Regímenes fiscales
+          </Text>
+
+          <ActionsheetFlatList
+            data={taxRegimeOptions}
+            keyExtractor={(item: RegimenFiscalOption) => item.value}
+            className="w-full"
+            contentContainerStyle={{ paddingBottom: 8 }}
+            renderItem={({ item }: { item: RegimenFiscalOption }) => {
+              const isSelected = selectedValues.includes(item.value);
+              return (
+                <Pressable
+                  onPress={() => toggleOption(item.value)}
+                  className="w-full flex-row items-center gap-3 border-b border-slate-100 py-3">
+                  <Ionicons
+                    name={isSelected ? "checkbox" : "square-outline"}
+                    size={20}
+                    color={isSelected ? "#1E40AF" : "#94A3B8"}
+                  />
+                  <Text
+                    className={`flex-1 text-sm ${
+                      isSelected
+                        ? "font-semibold text-slate-900"
+                        : "text-slate-600"
+                    }`}>
                     {item.label}
-                  </RadioLabel>
-                  <RadioIndicator>
-                    <RadioIcon as={CircleIcon} />
-                  </RadioIndicator>
-                </Radio>
-              )}
-            />
-          </RadioGroup>
+                  </Text>
+                </Pressable>
+              );
+            }}
+          />
+
+          <Button
+            onPress={() => setShowActionsheet(false)}
+            className="mb-6 mt-2 h-auto w-full flex-row items-center justify-center rounded-2xl bg-[#1E40AF] px-4 py-3 data-[hover=true]:bg-[#1D4ED8]">
+            <ButtonText>Listo</ButtonText>
+          </Button>
         </ActionsheetContent>
       </Actionsheet>
     </>
