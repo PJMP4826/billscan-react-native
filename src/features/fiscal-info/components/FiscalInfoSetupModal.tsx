@@ -1,5 +1,8 @@
+import { Ionicons } from "@expo/vector-icons";
+import React from "react";
+import { Pressable } from "react-native";
+
 import { Button, ButtonText } from "@/components/ui/button";
-import { Text } from "@/components/ui/text";
 import {
   FormControl,
   FormControlError,
@@ -17,9 +20,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@/components/ui/modal";
+import { Text } from "@/components/ui/text";
+import { todayIsoDate } from "@/src/features/fiscal-info/application/dates";
+import DatePickerField from "@/src/features/fiscal-info/components/DatePickerField";
 import InvoiceUseDropDown from "@/src/features/fiscal-info/components/InvoiceUseDropDown";
 import RegimenFiscalDropDown from "@/src/features/fiscal-info/components/RegimenFiscalDropDown";
 import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
+import { getTaxRegimeDescription } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
 import {
   FiscalInfoPayload,
   fiscalInfoSchema,
@@ -32,38 +39,63 @@ import {
   useWindowDimensions,
 } from "react-native";
 
+type FiscalInfoModalMode = "setup" | "update";
+
 interface Props {
   visible: boolean;
   onSubmit: (data: FiscalInfoPayload) => void;
   isSubmitting: boolean;
+  /** `setup` = primer registro, `update` = actualización desde el perfil. */
+  mode?: FiscalInfoModalMode;
+  /** Valores con los que se precarga el formulario (modo update). */
+  initialValues?: Partial<FiscalInfoPayload>;
+  /** Si se envía, el modal se puede cerrar sin guardar. */
+  onClose?: () => void;
 }
+
+const buildDefaultValues = (
+  initialValues?: Partial<FiscalInfoPayload>,
+): FiscalInfoPayload => ({
+  rfc: initialValues?.rfc ?? "",
+  razon_social: initialValues?.razon_social ?? "",
+  email: initialValues?.email ?? "",
+  cp: initialValues?.cp ?? "",
+  address: initialValues?.address ?? "",
+  regimenes: initialValues?.regimenes ?? [],
+  use_cfdi_code_default: initialValues?.use_cfdi_code_default ?? InvoiceUse.G03,
+});
 
 export const FiscalInfoSetupModal = ({
   visible,
   onSubmit,
   isSubmitting,
+  mode = "setup",
+  initialValues,
+  onClose,
 }: Props) => {
   const { width, height } = useWindowDimensions();
+  const isUpdate = mode === "update";
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FiscalInfoPayload>({
     resolver: zodResolver(fiscalInfoSchema),
-    defaultValues: {
-      rfc: "",
-      razon_social: "",
-      email: "",
-      cp: "",
-      address: "",
-      regimen_code: "",
-      use_cfdi_code_default: InvoiceUse.G03,
-    },
+    defaultValues: buildDefaultValues(initialValues),
   });
 
+  const initialValuesKey = JSON.stringify(initialValues ?? {});
+
+  // Al abrir el modal se refrescan los valores precargados (perfil → actualizar).
+  React.useEffect(() => {
+    if (!visible) return;
+    reset(buildDefaultValues(JSON.parse(initialValuesKey)));
+  }, [visible, initialValuesKey, reset]);
+
   return (
-    <Modal isOpen={visible}>
+    <Modal isOpen={visible} onClose={onClose}>
       <ModalBackdrop />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -76,10 +108,19 @@ export const FiscalInfoSetupModal = ({
         <ModalContent
           style={{
             width: width - 32, // full screen width minus 16px padding each side
-            maxHeight: height * 0.85, // 80% of screen height
+            maxHeight: height * 0.85, // 85% of screen height
           }}>
           <ModalHeader>
-            <Heading size="lg">Configura tu información fiscal</Heading>
+            <Heading size="lg">
+              {isUpdate
+                ? "Actualiza tu información fiscal"
+                : "Configura tu información fiscal"}
+            </Heading>
+            {onClose ? (
+              <Pressable onPress={onClose} hitSlop={8}>
+                <Ionicons name="close" size={22} color="#64748B" />
+              </Pressable>
+            ) : null}
           </ModalHeader>
 
           <ModalBody>
@@ -220,23 +261,96 @@ export const FiscalInfoSetupModal = ({
               )}
             />
 
-            {/* Régimen Fiscal */}
+            {/* Regímenes fiscales (multi-selección) */}
             <Controller
               control={control}
-              name="regimen_code"
-              render={({ field: { onChange, value } }) => (
-                <FormControl isInvalid={!!errors.regimen_code} className="mb-4">
-                  <FormControlLabel>
-                    <FormControlLabelText>Régimen Fiscal</FormControlLabelText>
-                    <Text style={{ color: "#ef4444" }}> *</Text>
-                  </FormControlLabel>
+              name="regimenes"
+              render={({ field: { onChange, value } }) => {
+                const regimenes = value ?? [];
 
-                  <RegimenFiscalDropDown
-                    selectedValue={value}
-                    onValueChange={onChange}
-                  />
-                </FormControl>
-              )}
+                const handleValuesChange = (codes: string[]) => {
+                  const known = new Map(
+                    regimenes.map((item) => [item.code, item.fecha_alta_sat]),
+                  );
+                  onChange(
+                    codes.map((code) => ({
+                      code,
+                      fecha_alta_sat: known.get(code) || todayIsoDate(),
+                    })),
+                  );
+                };
+
+                return (
+                  <FormControl isInvalid={!!errors.regimenes} className="mb-4">
+                    <FormControlLabel>
+                      <FormControlLabelText>
+                        Regímenes fiscales
+                      </FormControlLabelText>
+                      <Text style={{ color: "#ef4444" }}> *</Text>
+                    </FormControlLabel>
+
+                    <RegimenFiscalDropDown
+                      selectedValues={regimenes.map((item) => item.code)}
+                      onValuesChange={handleValuesChange}
+                      isInvalid={!!errors.regimenes}
+                    />
+
+                    {regimenes.map((regimen) => (
+                      <FormControl
+                        key={regimen.code}
+                        className="mt-3"
+                        isInvalid={
+                          !!errors.regimenes?.[
+                            regimenes.findIndex(
+                              (item) => item.code === regimen.code,
+                            )
+                          ]?.fecha_alta_sat
+                        }>
+                        <FormControlLabel>
+                          <FormControlLabelText>
+                            {`Alta en el SAT · ${regimen.code} - ${getTaxRegimeDescription(
+                              regimen.code,
+                            )}`}
+                          </FormControlLabelText>
+                          <Text style={{ color: "#ef4444" }}> *</Text>
+                        </FormControlLabel>
+                        <DatePickerField
+                          value={regimen.fecha_alta_sat}
+                          onChange={(fecha) =>
+                            onChange(
+                              regimenes.map((item) =>
+                                item.code === regimen.code
+                                  ? { ...item, fecha_alta_sat: fecha }
+                                  : item,
+                              ),
+                            )
+                          }
+                        />
+                        <FormControlError>
+                          <FormControlErrorText>
+                            {
+                              errors.regimenes?.[
+                                regimenes.findIndex(
+                                  (item) => item.code === regimen.code,
+                                )
+                              ]?.fecha_alta_sat?.message
+                            }
+                          </FormControlErrorText>
+                        </FormControlError>
+                      </FormControl>
+                    ))}
+
+                    <FormControlError>
+                      <FormControlErrorText>
+                        {
+                          (errors.regimenes as { message?: string } | undefined)
+                            ?.message
+                        }
+                      </FormControlErrorText>
+                    </FormControlError>
+                  </FormControl>
+                );
+              }}
             />
 
             {/* Uso de Cfdi */}
@@ -264,12 +378,25 @@ export const FiscalInfoSetupModal = ({
           </ModalBody>
 
           <ModalFooter>
+            {onClose ? (
+              <Button
+                variant="outline"
+                onPress={onClose}
+                isDisabled={isSubmitting}
+                className="flex-1">
+                <ButtonText className="text-[#1E40AF]">Cancelar</ButtonText>
+              </Button>
+            ) : null}
             <Button
               onPress={handleSubmit(onSubmit)}
               isDisabled={isSubmitting}
               className="flex-1">
               <ButtonText>
-                {isSubmitting ? "Guardando..." : "Guardar información fiscal"}
+                {isSubmitting
+                  ? "Guardando..."
+                  : isUpdate
+                    ? "Actualizar"
+                    : "Guardar información fiscal"}
               </ButtonText>
             </Button>
           </ModalFooter>
