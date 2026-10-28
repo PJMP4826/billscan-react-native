@@ -18,6 +18,13 @@
 </p>
 
 <p align="center">
+  <a href="https://billscan-react-native.onrender.com/">
+    <img src="https://img.shields.io/badge/%F0%9F%9A%80%20PROBAR%20LA%20LIVE%20DEMO-Abrir%20app%20web-2563EB?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Probar la Live Demo de BillScan" height="44" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://billscan-react-native.onrender.com/"><strong>Live Demo</strong></a> ·
   <a href="#features">Features</a> ·
   <a href="#stack-tecnológico">Stack</a> ·
   <a href="#arquitectura">Arquitectura</a> ·
@@ -33,6 +40,9 @@
 BillScan convierte los tickets del día a día en un historial ordenado y listo para facturar. Captura una o varias imágenes, guárdalas como ticket o solicita su facturación, y consulta después el CFDI con sus datos fiscales, conceptos, impuestos y certificación del SAT.
 
 Es una app construida con Expo para **Android, iOS y web**, pensada como proyecto de portfolio. Por defecto funciona con datos mock, así que puedes explorarla sin levantar un backend.
+
+> [!TIP]
+> **Live Demo:** [billscan-react-native.onrender.com](https://billscan-react-native.onrender.com/) — no requiere instalar nada. El primer acceso puede tardar unos segundos porque el hosting gratuito suspende el servicio tras un periodo de inactividad.
 
 > [!NOTE]
 > Las capturas y el GIF usan datos, RFC y montos ficticios. No contienen información fiscal real.
@@ -169,11 +179,11 @@ git clone https://github.com/PJMP4826/billscan-react-native.git
 cd billscan-react-native
 npm install
 cp .env.example .env.local
-npm start
+npm run web
 ```
 
 - `npm install` usa el `.npmrc` del repo (`legacy-peer-deps=true`) para resolver las dependencias en release candidate.
-- `.env.local` está ignorado por git. Si cambias las variables, reinicia Metro con `npx expo start --clear`.
+- `.env.local` está ignorado por git. Si cambias las variables, reinicia Metro con `npm run dev -- --clear`.
 - Con `EXPO_PUBLIC_USE_MOCKS=true` la app arranca sin backend.
 - En un dispositivo físico, usa la IP LAN de tu computadora en `EXPO_PUBLIC_API_URL`, no `localhost`.
 
@@ -193,11 +203,15 @@ Crea `.env.local` a partir de `.env.example`:
 
 | Comando | Qué hace |
 | --- | --- |
-| `npm start` | Inicia Metro / Expo. |
-| `npm run android` | Compila y ejecuta el development build en Android. |
-| `npm run ios` | Compila y ejecuta el development build en iOS. |
-| `npm run web` | Inicia la versión web con Metro. |
+| `npm run dev` | Inicia el servidor de desarrollo de Expo (Metro) para el development build. |
+| `npm run android` | Compila y ejecuta el development build en Android (`expo run:android`). |
+| `npm run ios` | Compila y ejecuta el development build en iOS (`expo run:ios`). |
+| `npm run web` | Inicia la versión web con Metro (`expo start --web`). |
+| `npm run build` | Exporta la app web a `dist/` (`expo export -p web`). |
+| `npm start` | Sirve la build web ya exportada desde `dist/` (`serve -s`) en el puerto `PORT`, 3000 por defecto. |
 | `npx tsc --noEmit` | Comprueba tipos sin generar archivos. |
+
+`npm start` no compila: es el comando que se usa en producción, así que requiere ejecutar `npm run build` antes.
 
 `package.json` todavía no define scripts de lint ni de test.
 
