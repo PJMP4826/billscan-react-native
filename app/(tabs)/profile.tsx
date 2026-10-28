@@ -1,6 +1,10 @@
-import { View, Text } from "react-native";
+import { ScreenContainer } from "@/src/shared/components/ScreenContainer";
+import { FiscalProfileScreen } from "@/src/features/fiscal-info/components/FiscalProfileScreen";
+
 export default function ProfileScreen() {
-  return <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-    <Text>Profle</Text>
-  </View>;
+  return (
+    <ScreenContainer title="Perfil" showBackButton={false}>
+      <FiscalProfileScreen />
+    </ScreenContainer>
+  );
 }
