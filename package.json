@@ -3,10 +3,12 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "serve dist -s -l ${PORT:-3000}",
+    "dev": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build": "npx expo export -p web"
   },
   "dependencies": {
     "@dariyd/react-native-document-scanner": "^2.0.19",
@@ -53,6 +55,7 @@
     "@types/react": "~19.2.4",
     "babel-plugin-module-resolver": "^5.0.0",
     "react-test-renderer": "19.1.0",
+    "serve": "^14.2.6",
     "tailwindcss": "4.1.12",
     "typescript": "~6.0.3"
   },
