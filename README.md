@@ -165,7 +165,7 @@ Todo se consume contra `EXPO_PUBLIC_API_URL`:
 
 ## Requisitos
 
-- Node.js 20 o superior y npm.
+- Node.js 20 o superior y pnpm 9 o superior.
 - Android Studio con SDK y emulador, o un dispositivo Android.
 - Xcode y CocoaPods para compilar en iOS (solo macOS).
 - Cuenta de Expo/EAS para builds en la nube.
@@ -177,13 +177,14 @@ Todo se consume contra `EXPO_PUBLIC_API_URL`:
 ```bash
 git clone https://github.com/PJMP4826/billscan-react-native.git
 cd billscan-react-native
-npm install
+pnpm install
 cp .env.example .env.local
-npm run web
+pnpm run web
 ```
 
-- `npm install` usa el `.npmrc` del repo (`legacy-peer-deps=true`) para resolver las dependencias en release candidate.
-- `.env.local` está ignorado por git. Si cambias las variables, reinicia Metro con `npm run dev -- --clear`.
+- `pnpm install` instala desde el `pnpm-lock.yaml` del repo. Respeta `node-linker=hoisted` del `.npmrc`, autoconfigura los peers (`autoInstallPeers`) y usa los `packageExtensions` de `pnpm-workspace.yaml` para resolver los peers faltantes de Gluestack UI en release candidate.
+- Si no tienes pnpm instalado, actívalo con `corepack enable pnpm`.
+- `.env.local` está ignorado por git. Si cambias las variables, reinicia Metro con `pnpm run dev -- --clear`.
 - Con `EXPO_PUBLIC_USE_MOCKS=true` la app arranca sin backend.
 - En un dispositivo físico, usa la IP LAN de tu computadora en `EXPO_PUBLIC_API_URL`, no `localhost`.
 
@@ -203,15 +204,15 @@ Crea `.env.local` a partir de `.env.example`:
 
 | Comando | Qué hace |
 | --- | --- |
-| `npm run dev` | Inicia el servidor de desarrollo de Expo (Metro) para el development build. |
-| `npm run android` | Compila y ejecuta el development build en Android (`expo run:android`). |
-| `npm run ios` | Compila y ejecuta el development build en iOS (`expo run:ios`). |
-| `npm run web` | Inicia la versión web con Metro (`expo start --web`). |
-| `npm run build` | Exporta la app web a `dist/` (`expo export -p web`). |
-| `npm start` | Sirve la build web ya exportada desde `dist/` (`serve -s`) en el puerto `PORT`, 3000 por defecto. |
-| `npx tsc --noEmit` | Comprueba tipos sin generar archivos. |
+| `pnpm run dev` | Inicia el servidor de desarrollo de Expo (Metro) para el development build. |
+| `pnpm run android` | Compila y ejecuta el development build en Android (`expo run:android`). |
+| `pnpm run ios` | Compila y ejecuta el development build en iOS (`expo run:ios`). |
+| `pnpm run web` | Inicia la versión web con Metro (`expo start --web`). |
+| `pnpm run build` | Exporta la app web a `dist/` (`expo export -p web`). |
+| `pnpm start` | Sirve la build web ya exportada desde `dist/` (`serve -s`) en el puerto `PORT`, 3000 por defecto. |
+| `pnpm exec tsc --noEmit` | Comprueba tipos sin generar archivos. |
 
-`npm start` no compila: es el comando que se usa en producción, así que requiere ejecutar `npm run build` antes.
+`pnpm start` no compila: es el comando que se usa en producción, así que requiere ejecutar `pnpm run build` antes.
 
 `package.json` todavía no define scripts de lint ni de test.
 
@@ -220,7 +221,7 @@ Crea `.env.local` a partir de `.env.example`:
 El repo incluye `eas.json` con los perfiles `development`, `preview` y `production`, además del `projectId` de EAS.
 
 ```bash
-npm install -g eas-cli
+pnpm add -g eas-cli
 eas login
 eas build -p android --profile preview
 eas build -p ios --profile preview
@@ -242,7 +243,7 @@ eas submit -p ios --profile production
 ## Testing, lint y typecheck
 
 ```bash
-npx tsc --noEmit
+pnpm exec tsc --noEmit
 ```
 
 - TypeScript está en modo `strict` y extiende `expo/tsconfig.base`; el alias `@/*` apunta a la raíz del proyecto.
@@ -276,7 +277,7 @@ Las contribuciones son bienvenidas.
 
 1. Haz un fork y crea una rama desde `main`.
 2. Usa mensajes de commit estilo Conventional Commits, por ejemplo `feat(invoices): agrega filtro por estado`.
-3. Ejecuta `npx tsc --noEmit` y prueba el flujo que cambiaste.
+3. Ejecuta `pnpm exec tsc --noEmit` y prueba el flujo que cambiaste.
 4. Abre un pull request describiendo el cambio y, si aplica, adjunta capturas.
 
 Para bugs o ideas, abre un issue con pasos para reproducir, plataforma y versión de la app.
