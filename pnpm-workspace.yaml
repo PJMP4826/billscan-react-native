@@ -1,0 +1,29 @@
+allowBuilds:
+  '@tailwindcss/oxide': true
+
+packageExtensions:
+  "@gluestack-ui/core":
+    peerDependencies:
+      "@react-aria/overlays": "*"
+      "@react-aria/interactions": "*"
+      "@react-aria/utils": "*"
+      "@react-aria/focus": "*"
+      "@react-aria/ssr": "*"
+      "@react-aria/dialog": "*"
+      "@react-aria/visually-hidden": "*"
+      "@react-aria/toggle": "*"
+      "@react-aria/checkbox": "*"
+      "@react-aria/radio": "*"
+      "@react-aria/button": "*"
+      "@react-aria/menu": "*"
+      "@react-aria/slider": "*"
+      "@react-stately/radio": "*"
+      "@react-stately/toggle": "*"
+      "@react-stately/checkbox": "*"
+  "@gluestack-ui/utils":
+    peerDependencies:
+      "@react-aria/ssr": "*"
+      "@react-aria/dialog": "*"
+      "@react-aria/utils": "*"
+      "react-stately": "*"
+      "@react-stately/radio": "*"
