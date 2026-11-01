@@ -1,11 +1,103 @@
+import { Platform } from "react-native";
 import { ENV } from "../../constants/env";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-interface ApiError {
+export interface ApiError {
   status: number;
+  title?: string;
   message: string;
 }
+
+const parseErrorText = (text: string, status: number): ApiError => {
+  try {
+    const parsed = JSON.parse(text) as Record<string, unknown>;
+
+    if (parsed && typeof parsed === "object") {
+      return {
+        status: typeof parsed.status === "number" ? parsed.status : status,
+        title: typeof parsed.title === "string" ? parsed.title : undefined,
+        message: typeof parsed.message === "string" ? parsed.message : text,
+      };
+    }
+  } catch {
+    // El body no era JSON; se conserva el texto original.
+  }
+
+  return { status, message: text };
+};
+
+const parseErrorResponse = async (response: Response): Promise<ApiError> => {
+  const text = await response.text();
+  return parseErrorText(text, response.status);
+};
+
+export const getApiErrorMessage = (
+  error: unknown,
+  fallback = "Ocurrió un error inesperado.",
+): string => {
+  if (typeof error === "string" && error.trim()) return error;
+
+  if (error && typeof error === "object" && "message" in error) {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === "string" && message.trim()) return message;
+  }
+
+  return fallback;
+};
+
+/**
+ * Envía multipart/form-data.
+ *
+ * En nativo no se puede usar `fetch`: Expo SDK 57 reemplaza el fetch global por
+ * `expo/fetch`, que no soporta las partes de archivo del FormData de React
+ * Native (`{ uri, type, name }`). `XMLHttpRequest` sí las procesa de forma
+ * nativa. En web se conserva `fetch` porque el FormData usa `Blob`.
+ */
+const postMultipart = <T>(endpoint: string, formData: FormData): Promise<T> => {
+  const url = `${ENV.API_URL}${endpoint}`;
+
+  if (Platform.OS === "web") {
+    return fetch(url, { method: "POST", body: formData }).then(
+      async (response) => {
+        if (!response.ok) throw await parseErrorResponse(response);
+        return response.json() as Promise<T>;
+      },
+    );
+  }
+
+  return new Promise<T>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", url);
+
+    console.log("Haciendo POST multipart a: ", url);
+
+    xhr.onload = () => {
+      console.log("Response multipart: ", xhr.status, xhr.responseText);
+
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          resolve(JSON.parse(xhr.responseText) as T);
+        } catch {
+          resolve(xhr.responseText as unknown as T);
+        }
+        return;
+      }
+
+      reject(parseErrorText(xhr.responseText, xhr.status));
+    };
+
+    xhr.onerror = () => {
+      console.log("Error de red en POST multipart a: ", url);
+      reject({
+        status: 0,
+        message: "No fue posible conectar con el servidor.",
+      } satisfies ApiError);
+    };
+
+    xhr.send(formData);
+  });
+};
 
 const request = async <T>(
   endpoint: string,
@@ -13,7 +105,9 @@ const request = async <T>(
   body?: unknown,
   headers: Record<string, string> = {},
 ): Promise<T> => {
-  const isFormData = body instanceof FormData;
+  if (body instanceof FormData) {
+    return postMultipart<T>(endpoint, body);
+  }
 
   console.log("Haciendo fetching to: ", `${ENV.API_URL}${endpoint}`);
   console.log("con method: ", method);
@@ -22,20 +116,14 @@ const request = async <T>(
 
   const response = await fetch(`${ENV.API_URL}${endpoint}`, {
     method,
-    headers: isFormData
-      ? headers // browser set Content-Type
-      : { "Content-Type": "application/json", ...headers },
-    body: isFormData ? body : body ? JSON.stringify(body) : undefined,
+    headers: { "Content-Type": "application/json", ...headers },
+    body: body ? JSON.stringify(body) : undefined,
   });
 
   console.log("Response de API: ", JSON.stringify(response))
 
   if (!response.ok) {
-    const error: ApiError = {
-      status: response.status,
-      message: await response.text(),
-    };
-    throw error;
+    throw await parseErrorResponse(response);
   }
 
   return response.json() as Promise<T>;
