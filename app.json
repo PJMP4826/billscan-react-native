@@ -14,13 +14,17 @@
       "backgroundColor": "#0c356a"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "BillScan utiliza la cámara para escanear tu constancia de situación fiscal."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/billscan-logo.png",
         "backgroundColor": "#0c356a"
       },
+      "permissions": ["android.permission.CAMERA"],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.anonymous.billscanreactnative"
@@ -35,7 +39,15 @@
       "expo-font",
       "expo-splash-screen",
       "expo-status-bar",
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "BillScan necesita acceso a tus fotos para adjuntar tu constancia fiscal.",
+          "cameraPermission": "BillScan utiliza la cámara para escanear tu constancia de situación fiscal."
+        }
+      ],
+      "expo-document-picker"
     ],
     "experiments": {
       "typedRoutes": true
