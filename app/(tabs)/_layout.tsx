@@ -1,5 +1,5 @@
 import { AppHeader } from "@/components/AppHeader";
-import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
+import { FiscalInfoCaptureFlow } from "@/src/features/fiscal-info/components/FiscalInfoCaptureFlow";
 import { useFiscalInfoSetup } from "@/src/features/fiscal-info/application/useFiscalInfoSetup";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -126,10 +126,10 @@ export default function TabLayout() {
       <WebCaptureModal />
       <CaptureBillingModal />
       <CaptureUploadResponseModal />
-      <FiscalInfoSetupModal
+      <FiscalInfoCaptureFlow
         visible={needsSetup && !isLoading}
-        onSubmit={submit}
-        isSubmitting={isSubmitting}
+        onManualSubmit={submit}
+        isManualSubmitting={isSubmitting}
       />
     </>
   );

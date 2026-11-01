@@ -8,7 +8,7 @@ import { VStack } from "@/components/ui/vstack";
 import { formatIsoDate, normalizeIsoDate, todayIsoDate } from "@/src/features/fiscal-info/application/dates";
 import { useFiscalInfoSetup } from "@/src/features/fiscal-info/application/useFiscalInfoSetup";
 import type { RegimenFiscalDto } from "@/src/features/fiscal-info/application/dtos/regimen-fiscal.dto";
-import { FiscalInfoSetupModal } from "@/src/features/fiscal-info/components/FiscalInfoSetupModal";
+import { FiscalInfoCaptureFlow } from "@/src/features/fiscal-info/components/FiscalInfoCaptureFlow";
 import { getInvoiceUseDescription } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 import { getTaxRegimeDescription } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
 import type { FiscalInfoPayload } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
@@ -242,13 +242,14 @@ export function FiscalProfileScreen() {
         </ButtonText>
       </Button>
 
-      <FiscalInfoSetupModal
+      <FiscalInfoCaptureFlow
         visible={isUpdateVisible}
         mode="update"
         initialValues={initialValues}
-        onSubmit={submit}
-        isSubmitting={isSubmitting}
+        onManualSubmit={submit}
+        isManualSubmitting={isSubmitting}
         onClose={() => setIsUpdateVisible(false)}
+        onSuccess={() => setIsUpdateVisible(false)}
       />
     </View>
   );
