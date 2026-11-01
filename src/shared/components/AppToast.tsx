@@ -8,6 +8,7 @@ import {
 import { VStack } from "@/components/ui/vstack";
 import { Ionicons } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
+import { useWindowDimensions } from "react-native";
 
 type IoniconName = NonNullable<ComponentProps<typeof Ionicons>["name"]>;
 
@@ -60,13 +61,16 @@ export function AppToast({
   action = "info",
 }: AppToastProps) {
   const visual = TOAST_VISUALS[action];
+  const { width: windowWidth } = useWindowDimensions();
+  const toastWidth = Math.min(windowWidth - 32, 420);
 
   return (
     <Toast
       nativeID={`toast-${id}`}
       action={action}
       variant="solid"
-      className={visual.className}>
+      className={visual.className}
+      style={{ width: toastWidth }}>
       <HStack className="w-full flex-row items-start gap-3">
         <Ionicons name={visual.icon} size={22} color={visual.iconColor} />
         <VStack className="flex-1 gap-0.5">
