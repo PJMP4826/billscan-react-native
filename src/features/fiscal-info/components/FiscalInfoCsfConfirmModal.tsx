@@ -73,10 +73,9 @@ export function FiscalInfoCsfConfirmModal({
     setEmailError(null);
   }, [visible, file?.uri, initialEmail, initialUseCfdiCodeDefault]);
 
-  if (!file) return null;
-
-  const isImage = file.mimeType.startsWith("image/");
-  const fileSize = formatFileSize(file.fileSize);
+  const isOpen = visible && !!file;
+  const isImage = file?.mimeType.startsWith("image/") ?? false;
+  const fileSize = file ? formatFileSize(file.fileSize) : null;
 
   const handleSubmit = () => {
     const parsed = emailSchema.safeParse(email.trim());
@@ -91,7 +90,7 @@ export function FiscalInfoCsfConfirmModal({
   };
 
   return (
-    <Modal isOpen={visible} onClose={isSubmitting ? undefined : onBack}>
+    <Modal isOpen={isOpen} onClose={isSubmitting ? undefined : onBack}>
       <ModalBackdrop />
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -115,37 +114,41 @@ export function FiscalInfoCsfConfirmModal({
 
           <ModalBody>
             <VStack className="w-full gap-4">
-              {isImage ? (
-                <View className="w-full overflow-hidden rounded-2xl bg-slate-100">
-                  <Image
-                    source={{ uri: file.uri }}
-                    style={{ width: "100%", height: 160 }}
-                    resizeMode="contain"
-                  />
-                </View>
-              ) : (
-                <HStack className="w-full flex-row items-center gap-3 rounded-2xl bg-slate-50 p-3">
-                  <View className="h-11 w-11 items-center justify-center rounded-xl bg-[#EFF6FF]">
-                    <Ionicons
-                      name="document-text-outline"
-                      size={22}
-                      color="#1D4ED8"
+              {file ? (
+                isImage ? (
+                  <View className="w-full overflow-hidden rounded-2xl bg-slate-100">
+                    <Image
+                      source={{ uri: file.uri }}
+                      style={{ width: "100%", height: 160 }}
+                      resizeMode="contain"
                     />
                   </View>
-                  <View className="flex-1">
-                    <Text
-                      className="text-sm font-semibold text-slate-700"
-                      numberOfLines={1}>
-                      {file.fileName}
-                    </Text>
-                    {fileSize ? (
-                      <Text className="text-xs text-slate-400">{fileSize}</Text>
-                    ) : null}
-                  </View>
-                </HStack>
-              )}
+                ) : (
+                  <HStack className="w-full flex-row items-center gap-3 rounded-2xl bg-slate-50 p-3">
+                    <View className="h-11 w-11 items-center justify-center rounded-xl bg-[#EFF6FF]">
+                      <Ionicons
+                        name="document-text-outline"
+                        size={22}
+                        color="#1D4ED8"
+                      />
+                    </View>
+                    <View className="flex-1">
+                      <Text
+                        className="text-sm font-semibold text-slate-700"
+                        numberOfLines={1}>
+                        {file.fileName}
+                      </Text>
+                      {fileSize ? (
+                        <Text className="text-xs text-slate-400">
+                          {fileSize}
+                        </Text>
+                      ) : null}
+                    </View>
+                  </HStack>
+                )
+              ) : null}
 
-              {isImage && (file.fileName || fileSize) ? (
+              {file && isImage && (file.fileName || fileSize) ? (
                 <Text className="text-sm text-slate-500" numberOfLines={1}>
                   {[file.fileName, fileSize].filter(Boolean).join(" · ")}
                 </Text>
