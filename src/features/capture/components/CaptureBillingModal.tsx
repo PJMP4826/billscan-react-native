@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/modal";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { CaptureBillingSheet } from "@/src/features/capture/components/CaptureBillingSheet";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 
 export function CaptureBillingModal() {
   const {
@@ -21,13 +23,20 @@ export function CaptureBillingModal() {
     images,
     isSubmitting,
   } = useCaptureContext();
+  const [billingSheetVisible, setBillingSheetVisible] = useState(false);
 
   const onClose = () => {
     setBillingModalVisible(false);
   };
 
+  const openBillingSheet = () => {
+    setBillingModalVisible(false);
+    setBillingSheetVisible(true);
+  };
+
   return (
-    <Modal isOpen={billingModalVisible} onRequestClose={onClose}>
+    <>
+      <Modal isOpen={billingModalVisible} onRequestClose={onClose}>
       <ModalBackdrop />
       <ModalContent className="w-[92%] max-w-105 rounded-3xl px-0 py-0 overflow-hidden">
         <ModalHeader className="px-6 pt-6">
@@ -65,13 +74,19 @@ export function CaptureBillingModal() {
 
           <Button
             className="w-full flex-row items-center justify-center gap-2 bg-[#1E40AF] data-[hover=true]:bg-[#1D4ED8]"
-            onPress={() => submit(true)}
+            onPress={openBillingSheet}
             isDisabled={isSubmitting}>
             <Ionicons name="receipt-outline" size={20} color="#ffffff" />
             <ButtonText className="text-white">Escanear y facturar</ButtonText>
           </Button>
         </ModalFooter>
       </ModalContent>
-    </Modal>
+      </Modal>
+
+      <CaptureBillingSheet
+        isOpen={billingSheetVisible}
+        onClose={() => setBillingSheetVisible(false)}
+      />
+    </>
   );
 }
