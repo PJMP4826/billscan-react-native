@@ -96,3 +96,52 @@ export const mapFiscalInfoApiItemToDto = (
 export const mapFiscalInfoResponseToDto = (
   response: FiscalInfoResponse,
 ): FiscalInfoDto => mapFiscalInfoApiItemToDto(response.data);
+
+/* ══════════════════════════════════════════════════════════════════════════
+ * Contrato de la API para GET /fiscal-info/regimens
+ * ══════════════════════════════════════════════════════════════════════════ */
+
+export const regimenFiscalApiSchema = z.object({
+  code: z.string().min(1),
+  description: z.string().nullish(),
+  fecha_alta: z.string().nullish(),
+});
+
+export const fiscalRegimensResponseSchema = z.object({
+  status: z.number(),
+  data: z.array(regimenFiscalApiSchema),
+});
+
+export type FiscalRegimensResponse = z.infer<
+  typeof fiscalRegimensResponseSchema
+>;
+
+const regimenSortTime = (fechaAlta: string): number => {
+  const time = Date.parse(fechaAlta);
+  return Number.isNaN(time) ? Number.NEGATIVE_INFINITY : time;
+};
+
+/**
+ * Mapea la respuesta de regímenes a DTOs ordenados por `fecha_alta`
+ * descendente (el más reciente primero).
+ */
+export const mapFiscalRegimensResponseToDto = (
+  response: FiscalRegimensResponse,
+): RegimenFiscalDto[] =>
+  response.data
+    .map<RegimenFiscalDto>((regimen) => ({
+      code: regimen.code as TaxRegime,
+      description:
+        regimen.description?.trim() || "Régimen sin descripción",
+      fecha_alta: regimen.fecha_alta ?? "",
+    }))
+    .sort((a, b) => {
+      const aTime = regimenSortTime(a.fecha_alta);
+      const bTime = regimenSortTime(b.fecha_alta);
+
+      if (aTime === bTime) {
+        return a.code.localeCompare(b.code);
+      }
+
+      return bTime - aTime;
+    });
