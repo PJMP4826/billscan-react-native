@@ -5,6 +5,7 @@ import { queryKeys } from "@/src/features/fiscal-info/infrastructure/constants/q
 import { createFiscalInfoCsf } from "@/src/features/fiscal-info/infrastructure/factories/fiscal-info-csf.factory";
 import { createFiscalInfoReadModel } from "@/src/features/fiscal-info/infrastructure/factories/fiscal-info-read-model.factory";
 import { fiscalInfoApi } from "@/src/features/fiscal-info/infrastructure/services/api/fiscal-info-api";
+import { mapFiscalRegimensResponseToDto } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 
 export const useFiscalInfoQuery = () =>
   useQuery({
@@ -12,6 +13,15 @@ export const useFiscalInfoQuery = () =>
     queryFn: () => createFiscalInfoReadModel().getFiscalInfo(),
     staleTime: 1000 * 60 * 60 * 24, // 24h — fiscal data rarely changes
     retry: false, // don't retry on 404
+  });
+
+export const useFiscalRegimensQuery = () =>
+  useQuery({
+    queryKey: queryKeys.fiscalInfo.regimens(),
+    queryFn: async () =>
+      mapFiscalRegimensResponseToDto(await fiscalInfoApi.getRegimens()),
+    staleTime: 1000 * 60 * 60 * 24, // 24h — catálogo del SAT
+    retry: false,
   });
 
 interface UseCreateFiscalInfoOptions {

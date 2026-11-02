@@ -3,6 +3,7 @@ import type {
   FiscalInfoCreatedResponse,
   FiscalInfoPayload,
   FiscalInfoResponse,
+  FiscalRegimensResponse,
 } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 import type { FiscalInfoCsfInput } from "@/src/features/fiscal-info/domain/ports/fiscal-info-csf.port";
 import { Platform } from "react-native";
@@ -33,6 +34,8 @@ const buildCsfFormData = async ({
 
 export const fiscalInfoApi = {
   get: () => client.get<FiscalInfoResponse>("/fiscal-info"),
+  getRegimens: () =>
+    client.get<FiscalRegimensResponse>("/fiscal-info/regimens"),
   create: (payload: FiscalInfoPayload) =>
     client.post<FiscalInfoCreatedResponse>("/fiscal-info", payload),
   createFromCsf: async (
