@@ -3,9 +3,20 @@ import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-we
 import { type ReceiptUploadResponse } from "@/src/features/capture/domain/records/receipt-upload-response.record";
 import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 import { useReceiptSubmit } from "@/src/features/capture/infrastructure/hooks/useReceiptSubmit";
+import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
+import { TaxRegime } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
+import {
+  useFiscalInfoQuery,
+  useFiscalRegimensQuery,
+} from "@/src/features/fiscal-info/infrastructure/repositories/fiscal-info.repository";
 import { CaptureImageError } from "@/src/shared/errors/CaptureImageError";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import { Platform } from "react-native";
+
+interface BillingSelection {
+  usoCfdi: InvoiceUse;
+  regimen: TaxRegime;
+}
 
 interface CaptureContextValue {
   images: CapturedImage[];
@@ -23,7 +34,7 @@ interface CaptureContextValue {
   closeResponseModal: () => void;
   reset: () => void;
   openBillingOptions: () => void;
-  submit: (autoBilling: boolean) => Promise<void>;
+  submit: (autoBilling: boolean, selection?: BillingSelection) => Promise<void>;
 }
 const CaptureContext = createContext<CaptureContextValue | null>(null);
 
@@ -36,6 +47,8 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
     useState<ReceiptUploadResponse | null>(null);
 
   const { submit: uploadImages, isSubmitting } = useReceiptSubmit();
+  const { data: fiscalInfo } = useFiscalInfoQuery();
+  const { data: regimens } = useFiscalRegimensQuery();
 
   const openBillingOptions = () => {
     if (images.length === 0) return;
@@ -66,8 +79,18 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const submit = async (autoBilling: boolean) => {
-    const response = await uploadImages({ images, autoBilling });
+  const submit = async (autoBilling: boolean, selection?: BillingSelection) => {
+    const usoCfdi =
+      selection?.usoCfdi ?? fiscalInfo?.use_cfdi_default ?? InvoiceUse.G03;
+    const regimen =
+      selection?.regimen ?? regimens?.[0]?.code ?? TaxRegime.R601;
+
+    const response = await uploadImages({
+      images,
+      autoBilling,
+      usoCfdi,
+      regimen,
+    });
     setBillingModalVisible(false);
     setSubmissionResponse(response);
     setResponseModalVisible(true);
