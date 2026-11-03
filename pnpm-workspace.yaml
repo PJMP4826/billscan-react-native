@@ -1,5 +1,7 @@
 allowBuilds:
   '@tailwindcss/oxide': true
+  browser-tabs-lock: true
+  core-js: true
 
 packageExtensions:
   "@gluestack-ui/core":
