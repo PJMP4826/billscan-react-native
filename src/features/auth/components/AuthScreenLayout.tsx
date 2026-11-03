@@ -1,10 +1,10 @@
 import { createContext, useContext, type ReactNode } from "react";
 import {
   Image,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
   Text,
   useWindowDimensions,
   View,
@@ -45,10 +45,13 @@ export function AuthScreenLayout({ children }: AuthScreenLayoutProps) {
 
   return (
     <AuthLayoutContext.Provider value={{ compact }}>
-      <ImageBackground
-        source={require("../../../../assets/images/background-image-auth.jpg")}
-        className="flex-1"
-        resizeMode="cover">
+      <View style={styles.root}>
+        <Image
+          source={require("../../../../assets/images/background-image-auth.jpg")}
+          style={[styles.background, { width, height }]}
+          resizeMode="cover"
+          fadeDuration={0}
+        />
         <View className="absolute inset-0 bg-black/40" />
         <KeyboardAvoidingView
           className="flex-1"
@@ -89,7 +92,19 @@ export function AuthScreenLayout({ children }: AuthScreenLayoutProps) {
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
-      </ImageBackground>
+      </View>
     </AuthLayoutContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
+  background: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+});
