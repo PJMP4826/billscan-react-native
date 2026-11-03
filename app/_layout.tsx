@@ -8,6 +8,7 @@ import { useFonts } from "expo-font";
 import { Stack, useRouter, useSegments } from "expo-router";
 import Head from "expo-router/head";
 import * as SplashScreen from "expo-splash-screen";
+import * as WebBrowser from "expo-web-browser";
 import { useEffect, type ReactNode } from "react";
 import "react-native-reanimated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -42,6 +43,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+WebBrowser.maybeCompleteAuthSession();
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
@@ -120,7 +122,10 @@ function AuthGate({ children }: { children: ReactNode }) {
   const segments = useSegments();
   const router = useRouter();
 
-  const isAuthRoute = segments[0] === "login" || segments[0] === "register";
+  const isAuthRoute =
+    segments[0] === "login" ||
+    segments[0] === "register" ||
+    segments[0] === "sso-callback";
 
   useEffect(() => {
     if (!isLoaded) return;

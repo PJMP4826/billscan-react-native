@@ -9,6 +9,7 @@ import {
   AuthScreenLayout,
   useAuthLayout,
 } from "@/src/features/auth/components/AuthScreenLayout";
+import { GoogleSignInButton } from "@/src/features/auth/components/GoogleSignInButton";
 import { getClerkErrorMessage } from "@/src/features/auth/utils/clerkError";
 
 export default function LoginScreen() {
@@ -61,6 +62,16 @@ export default function LoginScreen() {
 
   return (
     <AuthScreenLayout>
+      <GoogleSignInButton disabled={loading} onError={setError} />
+
+      <View className="my-4 flex-row items-center gap-3">
+        <View className="h-px flex-1 bg-white/25" />
+        <Text className={`text-white/70 ${compact ? "text-xs" : "text-sm"}`}>
+          o
+        </Text>
+        <View className="h-px flex-1 bg-white/25" />
+      </View>
+
       <AuthField
         label="Correo Electrónico"
         placeholder="Ingrese su correo"
