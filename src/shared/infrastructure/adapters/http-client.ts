@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import { ENV } from "../../constants/env";
+import { getAuthHeaders } from "@/src/shared/infrastructure/adapters/auth/token";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -54,23 +55,31 @@ export const getApiErrorMessage = (
  * Native (`{ uri, type, name }`). `XMLHttpRequest` sí las procesa de forma
  * nativa. En web se conserva `fetch` porque el FormData usa `Blob`.
  */
-const postMultipart = <T>(endpoint: string, formData: FormData): Promise<T> => {
+const postMultipart = async <T>(
+  endpoint: string,
+  formData: FormData,
+): Promise<T> => {
   const url = `${ENV.API_URL}${endpoint}`;
+  const authHeaders = await getAuthHeaders();
 
   if (Platform.OS === "web") {
-    return fetch(url, { method: "POST", body: formData }).then(
-      async (response) => {
-        if (!response.ok) throw await parseErrorResponse(response);
-        return response.json() as Promise<T>;
-      },
-    );
+    const response = await fetch(url, {
+      method: "POST",
+      headers: authHeaders, // sin Content-Type: el navegador pone el boundary
+      body: formData,
+    });
+    if (!response.ok) throw await parseErrorResponse(response);
+    return response.json() as Promise<T>;
   }
 
   return new Promise<T>((resolve, reject) => {
+    console.log("Haciendo POST multipart a: ", url);
+
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
-
-    console.log("Haciendo POST multipart a: ", url);
+    for (const [key, value] of Object.entries(authHeaders)) {
+      xhr.setRequestHeader(key, value); // después de open(), antes de send()
+    }
 
     xhr.onload = () => {
       console.log("Response multipart: ", xhr.status, xhr.responseText);
@@ -109,6 +118,8 @@ const request = async <T>(
     return postMultipart<T>(endpoint, body);
   }
 
+  const authHeaders = await getAuthHeaders();
+
   console.log("Haciendo fetching to: ", `${ENV.API_URL}${endpoint}`);
   console.log("con method: ", method);
   console.log("mandado el body: ", body);
@@ -116,16 +127,13 @@ const request = async <T>(
 
   const response = await fetch(`${ENV.API_URL}${endpoint}`, {
     method,
-    headers: { "Content-Type": "application/json", ...headers },
+    headers: { "Content-Type": "application/json", ...headers, ...authHeaders },
     body: body ? JSON.stringify(body) : undefined,
   });
 
-  console.log("Response de API: ", JSON.stringify(response))
+  console.log("Response de API: ", JSON.stringify(response));
 
-  if (!response.ok) {
-    throw await parseErrorResponse(response);
-  }
-
+  if (!response.ok) throw await parseErrorResponse(response);
   return response.json() as Promise<T>;
 };
 
