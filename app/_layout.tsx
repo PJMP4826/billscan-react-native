@@ -103,6 +103,10 @@ function RootLayoutNav() {
                       options={{ headerShown: false }}
                     />
                     <Stack.Screen
+                      name="sso-callback"
+                      options={{ headerShown: false, animation: "none" }}
+                    />
+                    <Stack.Screen
                       name="modal"
                       options={{ presentation: "modal" }}
                     />
