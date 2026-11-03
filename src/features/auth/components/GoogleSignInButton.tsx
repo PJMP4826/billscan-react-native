@@ -3,8 +3,9 @@ import * as AuthSession from "expo-auth-session";
 import { useRouter } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Platform, Pressable, Text } from "react-native";
+import { ActivityIndicator, Platform, Pressable } from "react-native";
 import { Path, Svg } from "react-native-svg";
+import { Text } from "@/components/ui/text";
 
 import { getClerkErrorMessage } from "../utils/clerkError";
 import { useAuthLayout } from "./AuthScreenLayout";
@@ -140,7 +141,7 @@ export function GoogleSignInButton({
       ) : (
         <>
           <GoogleLogo size={compact ? 18 : 20} />
-          <Text style={labelStyle}>Continuar con Google</Text>
+          <Text style={labelStyle}>Continuar con Google {""}</Text>
         </>
       )}
     </Pressable>

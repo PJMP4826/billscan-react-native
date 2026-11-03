@@ -30,7 +30,7 @@ export function AuthButton({
       ) : (
         <Text
           className={`font-bold text-white ${compact ? "text-base" : "text-lg"}`}>
-          {title}
+          {title} {" "}
         </Text>
       )}
     </Pressable>

@@ -103,14 +103,14 @@ export default function LoginScreen() {
 
       <View className="mt-4 flex-row flex-wrap items-center justify-center">
         <Text className={`text-white ${compact ? "text-sm" : "text-base"}`}>
-          ¿No tienes cuenta?{" "}
+          ¿No tienes cuenta?  {"   "}
         </Text>
         <Link href="/register" asChild>
           <Text
             className={`font-bold text-white ${
               compact ? "text-sm" : "text-base"
             }`}>
-            Regístrate
+            Regístrate {"  "}
           </Text>
         </Link>
       </View>

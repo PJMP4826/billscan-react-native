@@ -82,7 +82,7 @@ export function AuthScreenLayout({ children }: AuthScreenLayoutProps) {
                   className={`font-bold tracking-tight text-white ${
                     compact ? "text-3xl" : "text-4xl"
                   }`}>
-                  BillScan
+                  BillScan {" "}
                 </Text>
               </View>
               {children}
