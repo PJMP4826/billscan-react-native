@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "app/login.tsx",
+    "app/register.tsx",
+    "app/_layout.tsx",
+    "src/features/auth/**/*.tsx",
+    "src/features/auth/**/*.ts",
+    "nativewind-env.d.ts"
+  ]
+}
