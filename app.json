@@ -4,7 +4,7 @@
     "slug": "billscan-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/billscan-logo.png",
+    "icon": "./assets/images/billiscan-icon-512.png",
     "scheme": "billscanreactnative",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
