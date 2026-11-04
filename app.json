@@ -8,11 +8,6 @@
     "scheme": "billscanreactnative",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/billscan-logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0c356a"
-    },
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -21,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/billscan-logo.png",
+        "foregroundImage": "./assets/images/billiscan-icon-512.png",
         "backgroundColor": "#0c356a"
       },
       "permissions": ["android.permission.CAMERA"],
@@ -37,7 +32,15 @@
     "plugins": [
       "expo-router",
       "expo-font",
-      "expo-splash-screen",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/billscan-logo.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#275fa9"
+        }
+      ],
       "expo-status-bar",
       "expo-web-browser",
       [

@@ -43,6 +43,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({ duration: 500, fade: true });
 WebBrowser.maybeCompleteAuthSession();
 const queryClient = new QueryClient();
 
@@ -143,7 +144,7 @@ function AuthGate({ children }: { children: ReactNode }) {
 
   if (!isLoaded) {
     return (
-      <View className="flex-1 items-center justify-center bg-[#0c356a]">
+      <View className="flex-1 items-center justify-center bg-[#275fa9]">
         <ActivityIndicator size="large" color="#ffffff" />
       </View>
     );
