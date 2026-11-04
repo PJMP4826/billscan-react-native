@@ -27,7 +27,7 @@
       "permissions": ["android.permission.CAMERA"],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.anonymous.billscanreactnative"
+      "package": "com.billscan"
     },
     "web": {
       "bundler": "metro",
