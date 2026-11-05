@@ -10,6 +10,9 @@ export interface ApiError {
   message: string;
 }
 
+const BASE_URL = `${ENV.API_URL}/api`;
+
+
 const parseErrorText = (text: string, status: number): ApiError => {
   try {
     const parsed = JSON.parse(text) as Record<string, unknown>;
@@ -59,7 +62,7 @@ const postMultipart = async <T>(
   endpoint: string,
   formData: FormData,
 ): Promise<T> => {
-  const url = `${ENV.API_URL}${endpoint}/api`;
+  const url = `${BASE_URL}${endpoint}`;  
   const authHeaders = await getAuthHeaders();
 
   if (Platform.OS === "web") {
@@ -120,12 +123,12 @@ const request = async <T>(
 
   const authHeaders = await getAuthHeaders();
 
-  console.log("Haciendo fetching to: ", `${ENV.API_URL}${endpoint}`);
+  console.log("Haciendo fetching to: ", `${BASE_URL}${endpoint}`);
   console.log("con method: ", method);
   console.log("mandado el body: ", body);
   console.log("y los headers: ", headers);
 
-  const response = await fetch(`${ENV.API_URL}${endpoint}`, {
+  const response = await fetch(`${BASE_URL}${endpoint}`, {
     method,
     headers: { "Content-Type": "application/json", ...headers, ...authHeaders },
     body: body ? JSON.stringify(body) : undefined,
