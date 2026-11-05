@@ -59,7 +59,7 @@ const postMultipart = async <T>(
   endpoint: string,
   formData: FormData,
 ): Promise<T> => {
-  const url = `${ENV.API_URL}${endpoint}`;
+  const url = `${ENV.API_URL}${endpoint}/api`;
   const authHeaders = await getAuthHeaders();
 
   if (Platform.OS === "web") {
