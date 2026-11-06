@@ -11,7 +11,8 @@ import * as SplashScreen from "expo-splash-screen";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, type ReactNode } from "react";
 import "react-native-reanimated";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/src/shared/infrastructure/query/query-client";
 
 import { useColorScheme } from "@/components/useColorScheme";
 import { ClerkProvider, useAuth } from "@clerk/expo";
@@ -45,7 +46,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 SplashScreen.preventAutoHideAsync();
 SplashScreen.setOptions({ duration: 500, fade: true });
 WebBrowser.maybeCompleteAuthSession();
-const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
