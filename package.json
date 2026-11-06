@@ -52,6 +52,7 @@
     "react-hook-form": "^7.80.0",
     "react-native": "0.86.3",
     "react-native-css": "3.1.0-rc.0",
+    "react-native-purchases": "^11.0.0",
     "react-native-reanimated": "4.5.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.0",
