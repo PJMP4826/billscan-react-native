@@ -3,6 +3,7 @@ import { CapturedImage } from "@/src/features/capture/domain/value_objects/captu
 import { receiptsApi } from "@/src/features/capture/infrastructure/services/api/receipts-api";
 import { InvoiceUse } from "@/src/features/fiscal-info/domain/enums/invoice-use.enum";
 import { TaxRegime } from "@/src/features/fiscal-info/domain/enums/tax-regime.enum";
+import { receiptPollingWindow } from "@/src/shared/infrastructure/polling/receipt-polling-window";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type ReceiptSubmitVariables = {
@@ -25,7 +26,9 @@ export function useReceiptSubmit() {
 
     onSuccess: (response) => {
       if (response.status === 202) {
-        queryClient.invalidateQueries({ queryKey: ["receipts"] });
+        receiptPollingWindow.start();
+        void queryClient.invalidateQueries({ queryKey: ["receipts"] });
+        void queryClient.invalidateQueries({ queryKey: ["reports"] });
       }
     },
   });
