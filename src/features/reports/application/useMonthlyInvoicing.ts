@@ -1,4 +1,5 @@
 import { useMonthlyInvoicingQuery } from "@/src/features/reports/infrastructure/repositories/monthly-invoicing.repository";
+import { useRefreshOnFocus } from "@/src/shared/hooks/useRefreshOnFocus";
 
 const formatCurrency = (value: string) => {
   const numericValue = Number.parseFloat(value);
@@ -17,6 +18,7 @@ const formatCurrency = (value: string) => {
 
 export const useMonthlyInvoicing = (period: string = "month") => {
   const query = useMonthlyInvoicingQuery(period);
+  useRefreshOnFocus(query.refetch);
 
   return {
     monthlyInvoicing: query.data

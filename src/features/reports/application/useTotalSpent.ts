@@ -1,4 +1,5 @@
 import { useReceiptsCountQuery } from "@/src/features/reports/infrastructure/repositories/receipts-count.repository";
+import { useRefreshOnFocus } from "@/src/shared/hooks/useRefreshOnFocus";
 
 const formatCurrency = (value: string) => {
   const numericValue = Number.parseFloat(value);
@@ -17,6 +18,7 @@ const formatCurrency = (value: string) => {
 
 export const useTotalSpent = () => {
   const query = useReceiptsCountQuery();
+  useRefreshOnFocus(query.refetch);
   const receiptsCount = query.data ?? null;
 
   return {

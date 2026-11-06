@@ -1,4 +1,5 @@
 import { useRecentActivityQuery } from "@/src/features/reports/infrastructure/repositories/recent-activity.repository";
+import { useRefreshOnFocus } from "@/src/shared/hooks/useRefreshOnFocus";
 
 interface RecentActivityRowViewModel {
   merchant: string;
@@ -35,6 +36,7 @@ const formatDateLabel = (value: string) => {
 
 export const useRecentActivity = () => {
   const query = useRecentActivityQuery();
+  useRefreshOnFocus(query.refetch);
 
   return {
     recentActivity: query.data
