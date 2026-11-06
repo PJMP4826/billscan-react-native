@@ -1,4 +1,5 @@
 import { useReceiptDetailQuery } from "@/src/features/receipts/infrastructure/repositories/receipt-detail.repository";
+import { useRefreshOnFocus } from "@/src/shared/hooks/useRefreshOnFocus";
 import {
   DEFAULT_CURRENCY_CODE,
   formatCurrency,
@@ -7,6 +8,7 @@ import { formatReceiptDateLabel } from "@/src/utils/receipt-date-formatter";
 
 export const useReceiptDetail = (receiptUuid: string) => {
   const query = useReceiptDetailQuery(receiptUuid);
+  useRefreshOnFocus(query.refetch);
   const detail = query.data;
 
   return {

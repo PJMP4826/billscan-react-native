@@ -4,6 +4,7 @@ import {
   type ReceiptStatus,
 } from "@/src/features/receipts/domain/enums/receipt-status.enum";
 import { useReceiptsQuery } from "@/src/features/receipts/infrastructure/repositories/receipts-list.repository";
+import { useRefreshOnFocus } from "@/src/shared/hooks/useRefreshOnFocus";
 
 export interface ReceiptListItemViewModel {
   receiptUuid: string;
@@ -72,6 +73,7 @@ export const useReceiptList = ({
   status,
 }: UseReceiptListOptions = {}) => {
   const query = useReceiptsQuery(page, pageSize, status);
+  useRefreshOnFocus(query.refetch);
 
   return {
     receipts: query.data ? query.data.receipts.map(mapReceiptToViewModel) : [],
