@@ -7,7 +7,6 @@
     "icon": "./assets/images/billiscan-icon-512.png",
     "scheme": "billscanreactnative",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -19,8 +18,7 @@
         "foregroundImage": "./assets/images/billiscan-icon-512.png",
         "backgroundColor": "#0c356a"
       },
-      "permissions": ["android.permission.CAMERA"],
-      "edgeToEdgeEnabled": true,
+      "permissions": ["android.permission.CAMERA", "com.android.vending.BILLING"],
       "predictiveBackGestureEnabled": false,
       "package": "com.billscan"
     },
