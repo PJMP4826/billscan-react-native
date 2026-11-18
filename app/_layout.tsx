@@ -15,6 +15,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/src/shared/infrastructure/query/query-client";
 
 import { useColorScheme } from "@/components/useColorScheme";
+import { ServiceWorkerUpdatePrompt } from "@/components/ServiceWorkerUpdatePrompt";
 import { ClerkProvider, useAuth } from "@clerk/expo";
 import { tokenCache } from "@clerk/expo/token-cache";
 import { ActivityIndicator, View } from "react-native";
@@ -118,6 +119,7 @@ function RootLayoutNav() {
           </QueryClientProvider>
         </GluestackUIProvider>
       </ClerkProvider>
+      <ServiceWorkerUpdatePrompt />
     </SafeAreaProvider>
   );
 }
