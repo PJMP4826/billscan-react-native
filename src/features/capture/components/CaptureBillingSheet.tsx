@@ -26,7 +26,6 @@ import {
   useFiscalInfoQuery,
   useFiscalRegimensQuery,
 } from "@/src/features/fiscal-info/infrastructure/repositories/fiscal-info.repository";
-import { getApiErrorMessage } from "@/src/shared/infrastructure/adapters/http-client";
 
 type SheetStep = "form" | "invoiceUse" | "regimen";
 
@@ -118,13 +117,11 @@ export function CaptureBillingSheet({
   const [regimen, setRegimen] = React.useState<TaxRegime | null>(
     defaultRegimen,
   );
-  const [submitError, setSubmitError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (!isOpen) return;
     setStep("form");
     setUseCfdi(defaultUseCfdi);
-    setSubmitError(null);
   }, [isOpen, defaultUseCfdi]);
 
   React.useEffect(() => {
@@ -148,19 +145,7 @@ export function CaptureBillingSheet({
   const handleSubmit = async () => {
     if (!regimen) return;
 
-    setSubmitError(null);
-
-    try {
-      await submit(true, { usoCfdi: useCfdi, regimen });
-      onClose();
-    } catch (error) {
-      setSubmitError(
-        getApiErrorMessage(
-          error,
-          "No fue posible enviar los tickets para facturar.",
-        ),
-      );
-    }
+    await submit(true, { usoCfdi: useCfdi, regimen });
   };
 
   return (
@@ -208,10 +193,6 @@ export function CaptureBillingSheet({
                     Reintentar regímenes
                   </ButtonText>
                 </Button>
-              ) : null}
-
-              {submitError ? (
-                <Text className="text-sm text-rose-600">{submitError}</Text>
               ) : null}
 
               <Button

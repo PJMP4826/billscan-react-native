@@ -1,5 +1,9 @@
 import { useCapture } from "@/src/features/capture/application/useCapture";
 import { CaptureWebSource } from "@/src/features/capture/domain/enums/capture-web-source.enum";
+import {
+  ReceiptUploadError,
+  mapReceiptUploadError,
+} from "@/src/features/capture/domain/errors/receipt-upload.error";
 import { type ReceiptUploadResponse } from "@/src/features/capture/domain/records/receipt-upload-response.record";
 import { CapturedImage } from "@/src/features/capture/domain/value_objects/captured-image.value_object";
 import { useReceiptSubmit } from "@/src/features/capture/infrastructure/hooks/useReceiptSubmit";
@@ -18,6 +22,13 @@ interface BillingSelection {
   regimen: TaxRegime;
 }
 
+interface ReceiptSubmission {
+  images: CapturedImage[];
+  autoBilling: boolean;
+  usoCfdi: InvoiceUse;
+  regimen: TaxRegime;
+}
+
 interface CaptureContextValue {
   images: CapturedImage[];
   isCapturing: boolean;
@@ -25,13 +36,20 @@ interface CaptureContextValue {
   error: CaptureImageError | null;
   webModalVisible: boolean;
   billingModalVisible: boolean;
+  billingSheetVisible: boolean;
   responseModalVisible: boolean;
+  errorModalVisible: boolean;
   submissionResponse: ReceiptUploadResponse | null;
+  submissionError: ReceiptUploadError | null;
   triggerCapture: () => Promise<void>;
   captureFromWeb: (source: CaptureWebSource) => Promise<void>;
   setWebModalVisible: (v: boolean) => void;
   setBillingModalVisible: (v: boolean) => void;
+  setBillingSheetVisible: (v: boolean) => void;
   closeResponseModal: () => void;
+  closeErrorModal: () => void;
+  retrySubmission: () => Promise<void>;
+  recapture: () => Promise<void>;
   reset: () => void;
   openBillingOptions: () => void;
   submit: (autoBilling: boolean, selection?: BillingSelection) => Promise<void>;
@@ -42,9 +60,15 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
   const { images, isCapturing, error, capture, reset } = useCapture();
   const [webModalVisible, setWebModalVisible] = useState(false);
   const [billingModalVisible, setBillingModalVisible] = useState(false);
+  const [billingSheetVisible, setBillingSheetVisible] = useState(false);
   const [responseModalVisible, setResponseModalVisible] = useState(false);
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [submissionResponse, setSubmissionResponse] =
     useState<ReceiptUploadResponse | null>(null);
+  const [submissionError, setSubmissionError] =
+    useState<ReceiptUploadError | null>(null);
+  const [lastSubmission, setLastSubmission] =
+    useState<ReceiptSubmission | null>(null);
 
   const { submit: uploadImages, isSubmitting } = useReceiptSubmit();
   const { data: fiscalInfo } = useFiscalInfoQuery();
@@ -58,6 +82,11 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
   const closeResponseModal = () => {
     setResponseModalVisible(false);
     setSubmissionResponse(null);
+  };
+
+  const closeErrorModal = () => {
+    setErrorModalVisible(false);
+    setSubmissionError(null);
   };
 
   const triggerCapture = async () => {
@@ -79,25 +108,54 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const performSubmit = async (submission: ReceiptSubmission) => {
+    try {
+      const response = await uploadImages(submission);
+      setBillingModalVisible(false);
+      setBillingSheetVisible(false);
+      setSubmissionError(null);
+      setSubmissionResponse(response);
+      setResponseModalVisible(true);
+
+      if (response.status === 202) {
+        reset();
+      }
+    } catch (error) {
+      setBillingModalVisible(false);
+      setBillingSheetVisible(false);
+      setSubmissionError(mapReceiptUploadError(error));
+      setErrorModalVisible(true);
+    }
+  };
+
   const submit = async (autoBilling: boolean, selection?: BillingSelection) => {
     const usoCfdi =
       selection?.usoCfdi ?? fiscalInfo?.use_cfdi_default ?? InvoiceUse.G03;
     const regimen =
       selection?.regimen ?? regimens?.[0]?.code ?? TaxRegime.R601;
 
-    const response = await uploadImages({
+    const submission: ReceiptSubmission = {
       images,
       autoBilling,
       usoCfdi,
       regimen,
-    });
-    setBillingModalVisible(false);
-    setSubmissionResponse(response);
-    setResponseModalVisible(true);
+    };
 
-    if (response.status === 202) {
-      reset();
-    }
+    setLastSubmission(submission);
+    await performSubmit(submission);
+  };
+
+  const retrySubmission = async () => {
+    if (!lastSubmission) return;
+    setErrorModalVisible(false);
+    await performSubmit(lastSubmission);
+  };
+
+  const recapture = async () => {
+    setErrorModalVisible(false);
+    setSubmissionError(null);
+    reset();
+    await triggerCapture();
   };
 
   return (
@@ -109,13 +167,20 @@ export function CaptureProvider({ children }: { children: ReactNode }) {
         error,
         webModalVisible,
         billingModalVisible,
+        billingSheetVisible,
         responseModalVisible,
+        errorModalVisible,
         submissionResponse,
+        submissionError,
         triggerCapture,
         captureFromWeb,
         setWebModalVisible,
         setBillingModalVisible,
+        setBillingSheetVisible,
         closeResponseModal,
+        closeErrorModal,
+        retrySubmission,
+        recapture,
         reset,
         openBillingOptions,
         submit,

@@ -1,6 +1,9 @@
 import { AppHeader } from "@/components/AppHeader";
 import { FiscalInfoCaptureFlow } from "@/src/features/fiscal-info/components/FiscalInfoCaptureFlow";
 import { useFiscalInfoSetup } from "@/src/features/fiscal-info/application/useFiscalInfoSetup";
+import { normalizeIsoDate, todayIsoDate } from "@/src/features/fiscal-info/application/dates";
+import { useFiscalInfoFlow } from "@/src/features/fiscal-info/context/FiscalInfoFlowContext";
+import type { FiscalInfoPayload } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
@@ -25,9 +28,30 @@ function IonIcon(props: { name: IoniconName; color: ColorValue }) {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { triggerCapture } = useCaptureContext();
-  const { needsSetup, isLoading, submit, isSubmitting, submitSuccess } =
-    useFiscalInfoSetup();
+  const { isOpen: isFiscalFlowOpen, close: closeFiscalFlow } =
+    useFiscalInfoFlow();
+  const { needsSetup, isLoading, fiscalInfo, submit, isSubmitting } =
+    useFiscalInfoSetup({ onSuccess: closeFiscalFlow });
   const insets = useSafeAreaInsets();
+
+  const fiscalInfoInitialValues = React.useMemo<
+    Partial<FiscalInfoPayload> | undefined
+  >(() => {
+    if (!fiscalInfo) return undefined;
+
+    return {
+      rfc: fiscalInfo.rfc,
+      razon_social: fiscalInfo.razon_social,
+      email: fiscalInfo.email,
+      cp: fiscalInfo.cp,
+      address: fiscalInfo.address,
+      use_cfdi_code_default: fiscalInfo.use_cfdi_default,
+      regimenes: fiscalInfo.regimenes.map((regimen) => ({
+        code: regimen.code,
+        fecha_alta_sat: normalizeIsoDate(regimen.fecha_alta) || todayIsoDate(),
+      })),
+    };
+  }, [fiscalInfo]);
 
   return (
     <>
@@ -127,9 +151,13 @@ export default function TabLayout() {
       <CaptureBillingModal />
       <CaptureUploadResponseModal />
       <FiscalInfoCaptureFlow
-        visible={needsSetup && !isLoading}
+        visible={(needsSetup && !isLoading) || isFiscalFlowOpen}
+        mode={needsSetup ? "setup" : "update"}
+        initialValues={needsSetup ? undefined : fiscalInfoInitialValues}
         onManualSubmit={submit}
         isManualSubmitting={isSubmitting}
+        onClose={closeFiscalFlow}
+        onSuccess={closeFiscalFlow}
       />
     </>
   );

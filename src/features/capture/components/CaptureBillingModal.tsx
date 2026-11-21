@@ -13,17 +13,17 @@ import { VStack } from "@/components/ui/vstack";
 import { CaptureBillingSheet } from "@/src/features/capture/components/CaptureBillingSheet";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 
 export function CaptureBillingModal() {
   const {
     billingModalVisible,
+    billingSheetVisible,
     setBillingModalVisible,
+    setBillingSheetVisible,
     submit,
     images,
     isSubmitting,
   } = useCaptureContext();
-  const [billingSheetVisible, setBillingSheetVisible] = useState(false);
 
   const onClose = () => {
     setBillingModalVisible(false);
@@ -64,7 +64,7 @@ export function CaptureBillingModal() {
         <ModalFooter className="flex-col gap-3 px-6 pb-6">
           <Button
             className="w-full flex-row items-center justify-center gap-2 bg-blue-100 data-[hover=true]:bg-[#d2dff1]"
-            onPress={() => submit(false)}
+            onPress={() => void submit(false)}
             isDisabled={isSubmitting}>
             <Ionicons name="save-outline" size={20} color="#1E40AF" />
             <ButtonText className="text-[#1E40AF]">

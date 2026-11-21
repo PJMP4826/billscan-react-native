@@ -37,6 +37,7 @@ export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
 import { CaptureProvider } from "@/src/features/capture/context/CaptureContext";
+import { FiscalInfoFlowProvider } from "@/src/features/fiscal-info/context/FiscalInfoFlowContext";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
@@ -81,39 +82,41 @@ function RootLayoutNav() {
           <QueryClientProvider client={queryClient}>
             <ThemeProvider
               value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-              <CaptureProvider>
-                <Head>
-                  <title>BillScan</title>
-                  <meta
-                    name="description"
-                    content="Escanea y gestiona tus facturas de forma rápida."
-                  />
-                </Head>
-                <AuthGate>
-                  <Stack>
-                    <Stack.Screen
-                      name="(tabs)"
-                      options={{ headerShown: false }}
+              <FiscalInfoFlowProvider>
+                <CaptureProvider>
+                  <Head>
+                    <title>BillScan</title>
+                    <meta
+                      name="description"
+                      content="Escanea y gestiona tus facturas de forma rápida."
                     />
-                    <Stack.Screen
-                      name="login"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="register"
-                      options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                      name="sso-callback"
-                      options={{ headerShown: false, animation: "none" }}
-                    />
-                    <Stack.Screen
-                      name="modal"
-                      options={{ presentation: "modal" }}
-                    />
-                  </Stack>
-                </AuthGate>
-              </CaptureProvider>
+                  </Head>
+                  <AuthGate>
+                    <Stack>
+                      <Stack.Screen
+                        name="(tabs)"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="login"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="register"
+                        options={{ headerShown: false }}
+                      />
+                      <Stack.Screen
+                        name="sso-callback"
+                        options={{ headerShown: false, animation: "none" }}
+                      />
+                      <Stack.Screen
+                        name="modal"
+                        options={{ presentation: "modal" }}
+                      />
+                    </Stack>
+                  </AuthGate>
+                </CaptureProvider>
+              </FiscalInfoFlowProvider>
             </ThemeProvider>
           </QueryClientProvider>
         </GluestackUIProvider>

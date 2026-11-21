@@ -8,6 +8,8 @@ export interface ApiError {
   status: number;
   title?: string;
   message: string;
+  errorCode?: string;
+  details?: Record<string, unknown>;
 }
 
 const BASE_URL = `${ENV.API_URL}/api`;
@@ -22,6 +24,12 @@ const parseErrorText = (text: string, status: number): ApiError => {
         status: typeof parsed.status === "number" ? parsed.status : status,
         title: typeof parsed.title === "string" ? parsed.title : undefined,
         message: typeof parsed.message === "string" ? parsed.message : text,
+        errorCode:
+          typeof parsed.error_code === "string" ? parsed.error_code : undefined,
+        details:
+          parsed.details && typeof parsed.details === "object"
+            ? (parsed.details as Record<string, unknown>)
+            : undefined,
       };
     }
   } catch {
