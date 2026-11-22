@@ -3,12 +3,14 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import type { InvoiceConceptoViewModel } from "@/src/features/invoices/application/useInvoiceDetail";
 import { useInvoiceDetail } from "@/src/features/invoices/application/useInvoiceDetail";
+import { useShareInvoiceXml } from "@/src/features/invoices/application/useShareInvoiceXml";
 import { InvoiceActions } from "@/src/features/invoices/components/detail/InvoiceActions";
 import { InvoiceConceptDetailSheet } from "@/src/features/invoices/components/detail/InvoiceConceptDetailSheet";
 import { InvoiceConceptsList } from "@/src/features/invoices/components/detail/InvoiceConceptsList";
 import { InvoiceFiscalData } from "@/src/features/invoices/components/detail/InvoiceFiscalData";
 import { InvoiceHero } from "@/src/features/invoices/components/detail/InvoiceHero";
 import { InvoiceSatCertification } from "@/src/features/invoices/components/detail/InvoiceSatCertification";
+import { useAppToast } from "@/src/shared/components/AppToast";
 import { PdfViewerModal } from "@/src/shared/components/PdfViewerModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
@@ -38,6 +40,9 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
     useState<InvoiceConceptoViewModel | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [pdfUri, setPdfUri] = useState<string | null>(null);
+
+  const { isSharing, share } = useShareInvoiceXml();
+  const appToast = useAppToast();
 
   /* ── Estados de carga / error ─────────────────────────────────────────── */
 
@@ -81,6 +86,17 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
     setIsSheetOpen(false);
   };
 
+  const handleShareXml = async () => {
+    const result = await share(detail.xmlUrl, detail.receiptUuid);
+
+    if (!result.success) {
+      appToast.showError(
+        "No se pudo compartir el XML",
+        result.error ?? "Intenta nuevamente.",
+      );
+    }
+  };
+
   return (
     <>
       <ScrollView
@@ -94,6 +110,8 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
             pdfUrl={detail.pdfUrl}
             xmlUrl={detail.xmlUrl}
             onPressPdf={() => setPdfUri(detail.pdfUrl)}
+            onPressShareXml={() => void handleShareXml()}
+            isSharing={isSharing}
           />
 
           <InvoiceFiscalData fiscal={viewModel.fiscal} />

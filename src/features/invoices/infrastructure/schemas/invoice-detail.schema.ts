@@ -100,8 +100,8 @@ export interface CfdiApi {
 export interface InvoiceDetailData {
   receipt_uuid: string;
   cfdi: CfdiApi;
-  xml_url: string;
-  pdf_url: string;
+  xml_url: string | null;
+  pdf_url: string | null;
 }
 
 export interface InvoiceDetailResponse {
