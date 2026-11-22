@@ -8,6 +8,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import ReactNativeBlobUtil from "react-native-blob-util";
 import Pdf from "react-native-pdf";
 import type { PdfViewerModalProps } from "@/src/shared/components/PdfViewerModal.types";
 
@@ -15,10 +16,21 @@ export function PdfViewerModal({ uri, onClose }: PdfViewerModalProps) {
   const { width } = useWindowDimensions();
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!uri) return;
+
+    // console.log("[PdfViewer] abrir", {
+    //   platform: Platform.OS,
+    //   uriBase: uri.split("?")[0],
+    //   uriLength: uri.length,
+    //   isHttp: /^https?:\/\//.test(uri),
+    //   cacheDir: ReactNativeBlobUtil?.fs?.dirs?.CacheDir,
+    // });
     setIsLoading(true);
     setHasError(false);
+    setErrorMessage(null);
   }, [uri]);
 
   // El contenedor ocupa el 92% del ancho; `Pdf` necesita un ancho numérico.
@@ -41,9 +53,30 @@ export function PdfViewerModal({ uri, onClose }: PdfViewerModalProps) {
           <View className="h-[85%] w-[92%] overflow-hidden rounded-3xl bg-white">
             <Pdf
               source={{ uri, cache: true }}
+              // react-native-pdf defaultea `trustAllCerts: true`, lo que hace que
+              // react-native-blob-util 1.x exija un `sharedTrustManager` nativo y
+              // falle con "Use of own trust manager but none defined". Como las
+              // URLs del backend usan TLS válido, basta con el cliente por defecto.
+              trustAllCerts={false}
               style={{ flex: 1, width: pdfWidth }}
-              onLoadComplete={() => setIsLoading(false)}
-              onError={() => {
+              onLoadComplete={(pages, path, size) => {
+                // if (__DEV__) {
+                //   console.log("[PdfViewer] onLoadComplete", {
+                //     pages,
+                //     path,
+                //     size,
+                //   });
+                // }
+                setIsLoading(false);
+              }}
+              onError={(error) => {
+                // console.error("[PdfViewer] onError", {
+                //   message: error?.message,
+                //   status: (error as { status?: number })?.status,
+                //   name: error?.name,
+                //   stack: error?.stack,
+                // });
+                setErrorMessage(error?.message ?? "Error desconocido");
                 setIsLoading(false);
                 setHasError(true);
               }}
@@ -66,8 +99,13 @@ export function PdfViewerModal({ uri, onClose }: PdfViewerModalProps) {
                   color="#E11D48"
                 />
                 <Text className="text-center text-sm font-normal text-rose-600">
-                  No fue posible cargar el PDF.
+                   {"   "}No fue posible cargar el PDF.
                 </Text>
+                {/* {errorMessage ? (
+                  <Text className="text-center text-xs text-rose-500">
+                    {errorMessage}
+                  </Text>
+                ) : null} */}
               </View>
             ) : null}
           </View>

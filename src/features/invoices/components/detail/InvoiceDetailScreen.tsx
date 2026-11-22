@@ -109,7 +109,17 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
           <InvoiceActions
             pdfUrl={detail.pdfUrl}
             xmlUrl={detail.xmlUrl}
-            onPressPdf={() => setPdfUri(detail.pdfUrl)}
+            onPressPdf={() => {
+              // console.log("[InvoiceDetail] pdfUrl", {
+              //   hasUrl: !!detail.pdfUrl,
+              //   base: detail.pdfUrl?.split("?")[0],
+              // });
+              // if (!detail.pdfUrl) {
+              //   console.warn("[InvoiceDetail] pdfUrl vacío/nulo");
+              //   return;
+              // }
+              setPdfUri(detail.pdfUrl);
+            }}
             onPressShareXml={() => void handleShareXml()}
             isSharing={isSharing}
           />
