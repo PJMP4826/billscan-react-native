@@ -10,8 +10,8 @@ import type { CfdiDto } from "@/src/features/invoices/application/dtos/invoice/c
 export interface InvoiceDetailDto {
   receiptUuid: string;
   cfdi: CfdiDto;
-  /** URL prefirmada con expiración. No se consume en esta pantalla. */
-  xmlUrl: string;
-  /** URL prefirmada con expiración. No se consume en esta pantalla. */
-  pdfUrl: string;
+  /** URL prefirmada con expiración para descargar el XML. */
+  xmlUrl: string | null;
+  /** URL prefirmada con expiración para visualizar el PDF. */
+  pdfUrl: string | null;
 }
