@@ -48,7 +48,9 @@
           "cameraPermission": "BillScan utiliza la cámara para escanear tu constancia de situación fiscal."
         }
       ],
-      "expo-document-picker"
+      "expo-document-picker",
+      "@config-plugins/react-native-blob-util",
+      "@config-plugins/react-native-pdf"
     ],
     "experiments": {
       "typedRoutes": true

@@ -84,8 +84,8 @@ export const invoiceDetailMockItems: Record<string, InvoiceDetailData> = {
       tipo_cambio: 1,
       descuento: null,
     },
-    xml_url: "https://example.com/cfdi/9f4c2e7a1b8d4c3e8f5a6b7c0d1e2f30.xml",
-    pdf_url: "https://example.com/cfdi/9f4c2e7a1b8d4c3e8f5a6b7c0d1e2f30.pdf",
+    xml_url: "https://repo.expopack.com.mx/epm2026/2036/2036-factura-uFBHt.xml",
+    pdf_url: "https://www.scjn.gob.mx/sites/default/files/fix/2023/02/DGIF-111-2022%20VP%20st.pdf",
   },
 };
 

@@ -3,27 +3,30 @@ import { HStack } from "@/components/ui/hstack";
 import { Ionicons } from "@expo/vector-icons";
 
 interface InvoiceActionsProps {
-  /** URL del PDF del CFDI (aún no consumida: la descarga queda fuera de alcance). */
+  /** URL del PDF del CFDI. Habilita el botón "Ver PDF". */
   pdfUrl?: string;
   /** URL del XML del CFDI (aún no consumida: la compartición queda fuera de alcance). */
   xmlUrl?: string;
+  /** Abre el visor de PDF. */
+  onPressPdf?: () => void;
 }
 
 /**
  * Botonera de acciones del detalle.
  *
- * NOTA: ambos botones son SOLO presentación. La descarga del PDF y la
- * compartición del XML están explícitamente fuera del alcance de esta tarea,
- * por eso los `onPress` quedan como no-ops marcados con `TODO`.
+ * El botón "Ver PDF" delega la apertura al contenedor; la compartición del XML
+ * sigue fuera de alcance y su `onPress` queda como no-op marcado con `TODO`.
  */
-export function InvoiceActions({ pdfUrl, xmlUrl }: InvoiceActionsProps) {
+export function InvoiceActions({
+  pdfUrl,
+  xmlUrl,
+  onPressPdf,
+}: InvoiceActionsProps) {
   return (
     <HStack className="w-full flex-row items-center gap-3">
       <Button
-        onPress={() => {
-          // TODO: descargar/abrir el PDF del CFDI.
-          void pdfUrl;
-        }}
+        onPress={onPressPdf}
+        disabled={!pdfUrl}
         className="h-auto flex-1 flex-row items-center justify-center gap-2 rounded-2xl bg-[#1E40AF] px-4 py-3">
         <Ionicons name="document-outline" size={17} color="#FFFFFF" />
         <ButtonText className="text-sm font-semibold text-white">

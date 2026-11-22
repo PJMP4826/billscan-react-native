@@ -9,6 +9,7 @@ import { InvoiceConceptsList } from "@/src/features/invoices/components/detail/I
 import { InvoiceFiscalData } from "@/src/features/invoices/components/detail/InvoiceFiscalData";
 import { InvoiceHero } from "@/src/features/invoices/components/detail/InvoiceHero";
 import { InvoiceSatCertification } from "@/src/features/invoices/components/detail/InvoiceSatCertification";
+import { PdfViewerModal } from "@/src/shared/components/PdfViewerModal";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
@@ -36,6 +37,7 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
   const [selectedConcepto, setSelectedConcepto] =
     useState<InvoiceConceptoViewModel | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [pdfUri, setPdfUri] = useState<string | null>(null);
 
   /* ── Estados de carga / error ─────────────────────────────────────────── */
 
@@ -88,7 +90,11 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
         <VStack className="w-full gap-4">
           <InvoiceHero hero={viewModel.hero} />
 
-          <InvoiceActions pdfUrl={detail.pdfUrl} xmlUrl={detail.xmlUrl} />
+          <InvoiceActions
+            pdfUrl={detail.pdfUrl}
+            xmlUrl={detail.xmlUrl}
+            onPressPdf={() => setPdfUri(detail.pdfUrl)}
+          />
 
           <InvoiceFiscalData fiscal={viewModel.fiscal} />
 
@@ -107,6 +113,8 @@ export function InvoiceDetailScreen({ receiptUuid }: InvoiceDetailScreenProps) {
         isOpen={isSheetOpen}
         onClose={handleCloseSheet}
       />
+
+      <PdfViewerModal uri={pdfUri} onClose={() => setPdfUri(null)} />
     </>
   );
 }
