@@ -18,7 +18,10 @@
         "foregroundImage": "./assets/images/billiscan-icon-512.png",
         "backgroundColor": "#0c356a"
       },
-      "permissions": ["android.permission.CAMERA", "com.android.vending.BILLING"],
+      "permissions": [
+        "android.permission.CAMERA",
+        "com.android.vending.BILLING"
+      ],
       "predictiveBackGestureEnabled": false,
       "package": "com.billscan"
     },
@@ -50,7 +53,8 @@
       ],
       "expo-document-picker",
       "@config-plugins/react-native-blob-util",
-      "@config-plugins/react-native-pdf"
+      "@config-plugins/react-native-pdf",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true
