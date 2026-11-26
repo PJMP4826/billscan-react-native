@@ -23,7 +23,8 @@
         "com.android.vending.BILLING"
       ],
       "predictiveBackGestureEnabled": false,
-      "package": "com.billscan"
+      "package": "com.billscan",
+    "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -54,7 +55,15 @@
       "expo-document-picker",
       "@config-plugins/react-native-blob-util",
       "@config-plugins/react-native-pdf",
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/notification-icon.png",
+          "color": "#275fa9",
+          "defaultChannel": "default"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

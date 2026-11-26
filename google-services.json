@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "184208011241",
+    "project_id": "billscan-react-native",
+    "storage_bucket": "billscan-react-native.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184208011241:android:e4ccbc7075b55b4fc26578",
+        "android_client_info": {
+          "package_name": "com.billscan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4FUxtBxRzhAd8MahP9ri7_KD611JD8xk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
