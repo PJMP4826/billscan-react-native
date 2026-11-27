@@ -25,7 +25,7 @@
       ],
       "predictiveBackGestureEnabled": false,
       "package": "com.billscan",
-    "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
@@ -64,7 +64,8 @@
           "color": "#275fa9",
           "defaultChannel": "default"
         }
-      ]
+      ],
+      "@clerk/expo-native-components"
     ],
     "experiments": {
       "typedRoutes": true

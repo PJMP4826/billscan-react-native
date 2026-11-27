@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@clerk/expo": "^4.14.5",
+    "@clerk/expo-native-components": "^0.4.9",
     "@config-plugins/react-native-blob-util": "^14.0.2",
     "@config-plugins/react-native-pdf": "^14.0.2",
     "@dariyd/react-native-document-scanner": "2.2.0",
