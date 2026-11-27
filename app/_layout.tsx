@@ -11,6 +11,7 @@ import * as SplashScreen from "expo-splash-screen";
 import * as WebBrowser from "expo-web-browser";
 import { useEffect, type ReactNode } from "react";
 import "react-native-reanimated";
+import "@/src/features/notifications/infrastructure/handlers/notifications-handler";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/src/shared/infrastructure/query/query-client";
 
@@ -38,6 +39,7 @@ export const unstable_settings = {
 };
 import { CaptureProvider } from "@/src/features/capture/context/CaptureContext";
 import { FiscalInfoFlowProvider } from "@/src/features/fiscal-info/context/FiscalInfoFlowContext";
+import { PushNotificationsProvider } from "@/src/features/notifications/context/PushNotificationsProvider";
 
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import "@/global.css";
@@ -84,37 +86,39 @@ function RootLayoutNav() {
               value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
               <FiscalInfoFlowProvider>
                 <CaptureProvider>
-                  <Head>
-                    <title>BillScan</title>
-                    <meta
-                      name="description"
-                      content="Escanea y gestiona tus facturas de forma rápida."
-                    />
-                  </Head>
-                  <AuthGate>
-                    <Stack>
-                      <Stack.Screen
-                        name="(tabs)"
-                        options={{ headerShown: false }}
+                  <PushNotificationsProvider>
+                    <Head>
+                      <title>BillScan</title>
+                      <meta
+                        name="description"
+                        content="Escanea y gestiona tus facturas de forma rápida."
                       />
-                      <Stack.Screen
-                        name="login"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="register"
-                        options={{ headerShown: false }}
-                      />
-                      <Stack.Screen
-                        name="sso-callback"
-                        options={{ headerShown: false, animation: "none" }}
-                      />
-                      <Stack.Screen
-                        name="modal"
-                        options={{ presentation: "modal" }}
-                      />
-                    </Stack>
-                  </AuthGate>
+                    </Head>
+                    <AuthGate>
+                      <Stack>
+                        <Stack.Screen
+                          name="(tabs)"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="login"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="register"
+                          options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                          name="sso-callback"
+                          options={{ headerShown: false, animation: "none" }}
+                        />
+                        <Stack.Screen
+                          name="modal"
+                          options={{ presentation: "modal" }}
+                        />
+                      </Stack>
+                    </AuthGate>
+                  </PushNotificationsProvider>
                 </CaptureProvider>
               </FiscalInfoFlowProvider>
             </ThemeProvider>
