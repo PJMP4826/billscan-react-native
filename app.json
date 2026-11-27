@@ -4,7 +4,7 @@
     "slug": "billscan-react-native",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/billiscan-icon-512.png",
+    "icon": "./assets/icons/ios/AppIcon~ios-marketing.png",
     "scheme": "billscanreactnative",
     "userInterfaceStyle": "automatic",
     "ios": {
@@ -15,8 +15,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/billiscan-icon-512.png",
-        "backgroundColor": "#0c356a"
+        "foregroundImage": "./assets/icons/android/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+        "monochromeImage": "./assets/icons/android/res/mipmap-xxxhdpi/ic_launcher_monochrome.png",
+        "backgroundColor": "#275fa9"
       },
       "permissions": [
         "android.permission.CAMERA",
@@ -29,7 +30,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/billscan-logo.png"
+      "favicon": "./assets/icons/web/icon-192.png"
     },
     "plugins": [
       "expo-router",
@@ -59,7 +60,7 @@
       [
         "expo-notifications",
         {
-          "icon": "./assets/images/notification-icon.png",
+          "icon": "./assets/icons/android/res/notification-icon.png",
           "color": "#275fa9",
           "defaultChannel": "default"
         }
