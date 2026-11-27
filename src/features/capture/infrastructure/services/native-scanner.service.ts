@@ -12,6 +12,7 @@ export class NativeScannerService implements ImageCapturePort {
       quality: 0.8,
       includeBase64: false,
       includeExif: true,
+      galleryImportAllowed: true,
     });
 
     if (!result?.images?.length) return [];
