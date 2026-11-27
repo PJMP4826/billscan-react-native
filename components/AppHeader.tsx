@@ -4,12 +4,16 @@ import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Heading } from "./ui/heading";
 import { useUser } from "@clerk/expo";
+import { Pressable } from "react-native";
+import { useState } from "react";
+import { ProfileDrawer } from "@/src/features/auth/components/ProfileDrawer";
 
 export const AppHeader = () => {
   const { data: fiscalInfo } = useFiscalInfoQuery();
   const accountName = fiscalInfo?.razon_social ?? "Usuario";
   const { user, isLoaded, isSignedIn } = useUser();
   const photoUrl = isLoaded && isSignedIn ? user.imageUrl : null;
+  const [showProfile, setShowProfile] = useState(false);
 
   const insets = useSafeAreaInsets();
 
@@ -19,7 +23,9 @@ export const AppHeader = () => {
       <View className="flex-row items-center justify-between w-full h-14 px-4">
         {/* Columna Izquierda */}
         <View className="flex-1 items-start justify-center">
-          <AccountAvatar name={accountName} src={photoUrl} />
+          <Pressable onPress={() => setShowProfile(true)}>
+            <AccountAvatar name={accountName} src={photoUrl} />
+          </Pressable>
         </View>
 
         {/* Título Central */}
@@ -35,6 +41,10 @@ export const AppHeader = () => {
         {/* Columna Derecha (Spacer) */}
         <View className="flex-1" />
       </View>
+      <ProfileDrawer
+        isOpen={showProfile}
+        onClose={() => setShowProfile(false)}
+      />
     </View>
   );
 };
