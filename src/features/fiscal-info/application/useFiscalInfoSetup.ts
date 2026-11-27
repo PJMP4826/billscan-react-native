@@ -30,9 +30,10 @@ export const useFiscalInfoSetup = (options?: UseFiscalInfoSetupOptions) => {
   return {
     fiscalInfo: query.data,
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     isError: query.isError,
     refetch: query.refetch,
-    needsSetup, // ← triggers the mandatory setup modal
+    needsSetup,
     submit,
     isSubmitting: mutation.isPending,
     submitError: mutation.error,

@@ -1,7 +1,10 @@
 import { AppHeader } from "@/components/AppHeader";
 import { FiscalInfoCaptureFlow } from "@/src/features/fiscal-info/components/FiscalInfoCaptureFlow";
 import { useFiscalInfoSetup } from "@/src/features/fiscal-info/application/useFiscalInfoSetup";
-import { normalizeIsoDate, todayIsoDate } from "@/src/features/fiscal-info/application/dates";
+import {
+  normalizeIsoDate,
+  todayIsoDate,
+} from "@/src/features/fiscal-info/application/dates";
 import { useFiscalInfoFlow } from "@/src/features/fiscal-info/context/FiscalInfoFlowContext";
 import type { FiscalInfoPayload } from "@/src/features/fiscal-info/infrastructure/schemas/fiscal-info.schema";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -16,6 +19,7 @@ import { CaptureBillingModal } from "@/src/features/capture/components/CaptureBi
 import { CaptureUploadResponseModal } from "@/src/features/capture/components/CaptureUploadResponseModal";
 import { WebCaptureModal } from "@/src/features/capture/components/WebCaptureModal";
 import { useCaptureContext } from "@/src/features/capture/context/CaptureContext";
+import { useAppToast } from "@/src/shared/components/AppToast";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
@@ -28,11 +32,64 @@ function IonIcon(props: { name: IoniconName; color: ColorValue }) {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
   const { triggerCapture } = useCaptureContext();
-  const { isOpen: isFiscalFlowOpen, close: closeFiscalFlow } =
-    useFiscalInfoFlow();
-  const { needsSetup, isLoading, fiscalInfo, submit, isSubmitting } =
-    useFiscalInfoSetup({ onSuccess: closeFiscalFlow });
+  const {
+    isOpen: isFiscalFlowOpen,
+    open: openFiscalFlow,
+    close: closeFiscalFlow,
+  } = useFiscalInfoFlow();
+  const {
+    needsSetup,
+    isLoading,
+    isFetching,
+    isError,
+    fiscalInfo,
+    refetch,
+    submit,
+    isSubmitting,
+  } = useFiscalInfoSetup({ onSuccess: closeFiscalFlow });
+  const appToast = useAppToast();
   const insets = useSafeAreaInsets();
+
+  const handleCameraPress = React.useCallback(async () => {
+    let currentFiscalInfo = fiscalInfo;
+
+    if (isLoading || isFetching || isError) {
+      const result = await refetch();
+      if (result.isError || result.data === undefined) {
+        appToast.showError(
+          "No se pudieron verificar tus datos fiscales",
+          "Intenta de nuevo.",
+        );
+        return;
+      }
+
+      currentFiscalInfo = result.data;
+    }
+
+    if (currentFiscalInfo === null) {
+      openFiscalFlow();
+      return;
+    }
+
+    if (currentFiscalInfo === undefined) {
+      appToast.showError(
+        "No se pudieron verificar tus datos fiscales",
+        "Intenta de nuevo.",
+      );
+      return;
+    }
+
+    await triggerCapture();
+  }, [
+    appToast,
+    fiscalInfo,
+    isError,
+    isFetching,
+    isLoading,
+    openFiscalFlow,
+    refetch,
+    triggerCapture,
+  ]);
 
   const fiscalInfoInitialValues = React.useMemo<
     Partial<FiscalInfoPayload> | undefined
@@ -103,7 +160,7 @@ export default function TabLayout() {
             tabBarLabel: () => null,
             tabBarButton: () => (
               <Pressable
-                onPress={triggerCapture}
+                onPress={handleCameraPress}
                 style={{
                   flex: 1,
                   justifyContent: "center",
@@ -151,7 +208,7 @@ export default function TabLayout() {
       <CaptureBillingModal />
       <CaptureUploadResponseModal />
       <FiscalInfoCaptureFlow
-        visible={(needsSetup && !isLoading) || isFiscalFlowOpen}
+        visible={isFiscalFlowOpen}
         mode={needsSetup ? "setup" : "update"}
         initialValues={needsSetup ? undefined : fiscalInfoInitialValues}
         onManualSubmit={submit}
